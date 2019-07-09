@@ -1,0 +1,10 @@
+TODO:
+-change constants
+ -pin values
+NOT COMPREHENSIVE
+
+Other questions:
+
+what is Timer3 used for?
+  comment says
+    // Attach the interrupt for INJ pulse modulation.
