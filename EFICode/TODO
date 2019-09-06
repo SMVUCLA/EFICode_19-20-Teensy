@@ -1,7 +1,15 @@
 TODO:
 -change constants
  -pin values
-NOT COMPREHENSIVE
+-different sensors
+ -no hall effect sensors
+ -different thermistor constants
+ -old map sensor broke
+ -LOOK THROUGH DRIVE FOR NEW SENSORS
+ -some sensors are set active high and should be active low and vice versa
+-Data.cpp
+ -change the 'values' struct to a string that is to be sent to serial print
+
 
 Other questions:
 
