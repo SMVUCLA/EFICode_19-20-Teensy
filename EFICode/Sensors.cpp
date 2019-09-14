@@ -28,7 +28,7 @@ double Controller::getTPS() {
   return newTPS;
 }
 
-double Controller::computeThrottleAdjustment() {
+double Controller::computeThrottleAdjustment() { // SHOULD THIS INCORPORATE DTPS?
   // Looks at the change in throttle position and determines a proper adjusment for the fuel input.
   // DTPS
   return 1 + TPS * TPS;

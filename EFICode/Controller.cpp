@@ -189,7 +189,7 @@ void Controller::lookupPulseTime() {
     scaledRPM = constrain(scaledRPM, 0, maxTableColIndex);
 
     // Get lower bounds for load and rpm indicies.
-    mapIndex = scaledMAP;
+    mapIndex = scaledMAP; // double to int
     rpmIndex = scaledRPM;
 
     // Clip extrapolation to the value at the max index. Otherwise, perform 2D interpolation to get
@@ -208,7 +208,7 @@ void Controller::lookupPulseTime() {
     {
         tempPulseTime *= startupModifier;
     }
-    throttleAdjustment = computeThrottleAdjustment();
+    throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2
     tempPulseTime *= throttleAdjustment;
     noInterrupts();
     injectorPulseTime = tempPulseTime * constModifier;
