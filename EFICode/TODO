@@ -5,26 +5,17 @@ TODO:
   -for example, due to 5V to 3v3 conversion circuitry for *SOME* ADC lines,
    the value at the ADC will be: = (1023 / 3.3) * ((5v value) * (.68027) > 3.3) ? 3.3 : (5v value) * (.68027)
       ^^^^^ for this reason we are losing the highest ~3% of values (about 110kPa and up for MPX4115A)
-Truncated ADC's
--MAP (A16)
--O2  (1: A15 2: A14)
--FPS (Fuel pressure?) (A17)
 
-1:1 Converted ADC's
--TPS (A13)
--ECT (A19) and IAT (A18)
- -these are bit different since they are thermisters,
-  and we instead measure resistance to find temp
+PERIPHERALS CHECKLIST
+ITEM		RECODED		TESTED
+MAP
+O2
+TPS
+ECT
+IAT
+FPS
+INJ
 
-
-
-
--different sensors
- -no hall effect sensors
- -different thermistor constants
- -old map sensor broke
- -LOOK THROUGH DRIVE FOR NEW SENSORS
- -some sensors are set active high and should be active low and vice versa
 -Data.cpp
  -change the 'values' struct to a string that is to be sent to serial print
  -have data be sent back after every injection?
@@ -41,6 +32,24 @@ VERY IMPORTANT!!!!!!!
  -TPS has V+ attached to 3.3v rail!!
 
 
+----ADC STUFF----
+-for all Analog to Digital Conversions
+ -a 1.2V Vref is available to check ADC accuracy if necessary
+ -speed of ADC is variable as well (can be made an interrupt even)
+ -can have the ADC take consecutive conversions and averege them if necessary
+   -change this if ADC is very volatile between conversions
+Truncated ADC's
+-MAP (A16)
+-O2  (1: A15 2: A14)
+-FPS (Fuel pressure?) (A17)
+1:1 Converted ADC's
+-TPS (A13)
+-ECT (A19) and IAT (A18)
+ -these are bit different since they are thermisters,
+  and we instead measure resistance to find temp
+
+
+Constants
 -Stoicometric ratio vs efficiency?
 -Constant Adjustments of Injection Time
  -throttleAdjustment = 1 + TDS^2   (THIS MAY BE AN ERROR IN THE CODE, SHOULD the calculation incorporate DTPS?)
@@ -50,8 +59,4 @@ VERY IMPORTANT!!!!!!!
     no increase in injection time for first few cycles
  -constModifier = 1.10
     fudge factor
--for all Analog to Digital Conversions
- -a 1.2V Vref is available to check ADC accuracy if necessary
- -speed of ADC is variable as well (can be made an interrupt even)
- -can have the ADC take consecutive conversions and averege them if necessary
-   -change this if ADC is very volatile between conversions
+
