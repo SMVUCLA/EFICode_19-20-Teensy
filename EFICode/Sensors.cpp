@@ -33,6 +33,7 @@ double Controller::computeThrottleAdjustment() { // SHOULD THIS INCORPORATE DTPS
 }
 
 //Temperature Measurement
+/*
 // Pre-computes the coefficient values in order to minimize operations
 // during runtime. These pre-computed values are enumerated below. Uses
 // the quadratic formula to calculate the temperature.
@@ -50,8 +51,26 @@ const double tempC = (tempBeta*tempBeta)/(2*tempAlpha);
 const double tempInputVal = V_in / voltageConversion;
 const double minTempVal = 0.5 / voltageConversion;
 const double maxTempVal = 4.5 / voltageConversion;
+*/
+
+// Identify the constant for each temperature sensor
+const char IAT_INDEX = 0;
+const char ECT_INDEX = 1;
+
+//The following constants are to complete the following eq for temperature
+//
+// Temp = tempBeta / (ln(R) + (tempBeta/T_0 - lnR_0))
+//	where R is the resistance of the sensor (found using voltage divider)
+//	eq from: https://en.wikipedia.org/wiki/Thermistor#B_or_%CE%B2_parameter_equation
+//
+const double tempBeta[2] = {2988,2988}; // tolerance: {+/-1%,+/-1.5%}
+const double T_0 = 298.15; // temp in Kelvin at which R_0 values are taken
+const double LnR_0[2] = {9.21034,8.45531}; // {ln(10000 (10000 +/-1%)),ln(4700 (4559 to 4841))}
+const double tempConst[2] = {tempBeta[IAT_INDEX]/T_0 - lnR_0[IAT_INDEX], tempBeta[ECT_INDEX]/T_0 - lnR_0[ECT_INDEX]};
+const double R_div[2] = {10000,10000}; // resistance of other resistor in voltage divider
 
 double Controller::getTemp(int pin) {
+/*
   //return analogRead(pin)*voltageConversion;
   //Gets temperature reading from specified sensor by using calibration curve
   //return tempSlope * analogRead(pin) + tempIntercept;
@@ -69,6 +88,16 @@ double Controller::getTemp(int pin) {
   double x = log((tempInputVal-mval)/(mval));
   //return tempA - tempB * sqrt(tempC - (tempGamma - x));
   return ((-tempBeta)-sqrt(pow(tempBeta,2)-4*tempAlpha*(tempGamma-x)))/(2 * tempAlpha);
+*/
+  char index; // identify which constants to use
+  switch(pin) {
+    case IAT: index = IAT_INDEX;
+    case ECT: index = ECT_INDEX;
+    default:  index = ECT_INDEX; // just in case
+  }
+
+  double tempR = R_div[index] / (adcMax/analogRead(pin) - 1); // find resistance of sensor
+  return tempBeta[index] / (log(tempR) + tempConst[index]);   // return temperature
 }
 
 //MAP Measurement

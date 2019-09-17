@@ -28,11 +28,13 @@ const int SP4 = 37;
 const double Vs_5 = 5.00; //Volts
 const double Vs_3v3 = 3.30; //Volts
 
+
 // Multiple by this number to convert analog readings to voltages from Op amps
-const double adcRef = 3.30; //Volts
+const double adcRef = Vs_3v3; //Volts
+const double maxADC = 1023;
+const double voltageConversion = adcRef / maxADC;
 const double opampVoltageDivider = 1000.0 / (1000 + 470);
-const double adcToOpampVin = adcRef / (1023 * opampVoltageDivider);
-const double voltageConversion = 5.0 / 1023;
+const double adcToOpampVin = adcRef / (maxADC * opampVoltageDivider);
 
 // Constants for calculating estimated injection times.
 const double engineDisplacement = 49.4E-6;    //meters^3
