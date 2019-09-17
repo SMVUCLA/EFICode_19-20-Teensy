@@ -4,8 +4,6 @@
 #include "Constants.h"
 #include "math.h"
 
-const double V_in = 5.00; //Volts
-
 // timepassed is in microseconds
 int Controller::getRPM (long int timePassed, int rev) {
   return (60000000.0 * rev) / (timePassed);
@@ -44,8 +42,8 @@ const double tempGamma = 2.18539E1;   // Coefficient of T^0 term.
 
 // Coefficients resulting from combining alpha and beta in an efficient way.
 const double tempA = -tempBeta/(2*tempAlpha);
-const double tempB = 1/(pow(tempAlpha,2));
-const double tempC = pow(tempBeta,2)/(2*tempAlpha);
+const double tempB = 1/(tempAlpha*tempAlpha);
+const double tempC = (tempBeta*tempBeta)/(2*tempAlpha);
 
 // The input voltage to the voltage divider consisting of a 1k resistor and the
 // thermistor in series.
@@ -81,9 +79,11 @@ double Controller::getTemp(int pin) {
 // const double MAPConversion = MAPSlope * voltageConversion; // Pascals / 1023
 
 // MPX4115A MAP sensor calibration
-const double MAPSlope = 1E3/0.009/V_in;  //Pa / Volt
-const double MAPOffset = 1E3*0.095/0.009;   //Pa
-const double MAPConversion = MAPSlope * voltageConversion;    // Pascals / 1023
+const double MAPVs = Vs_5;
+const double MAPDelta = 0.0; // should be between +/- 0.0675 volts (1.5 * 0.009 * Vs where Vs is 5)
+const double MAPSlope = 1E3/(MAPVs*0.009);  //Pa / Volt
+const double MAPOffset = 1E3*MAPDelta/(MAPVs*0.009) + 1E3*0.095/0.009;   //Pa
+const double MAPConversion = MAPSlope * adcToOpampVin;    // Pascals / 1023
 
 double Controller::getMAP() {
   //Calculates MAP, outputs in Pa

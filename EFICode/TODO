@@ -5,16 +5,19 @@ TODO:
   -for example, due to 5V to 3v3 conversion circuitry for *SOME* ADC lines,
    the value at the ADC will be: = (1023 / 3.3) * ((5v value) * (.68027) > 3.3) ? 3.3 : (5v value) * (.68027)
       ^^^^^ for this reason we are losing the highest ~3% of values (about 110kPa and up for MPX4115A)
+  -SET RESOLUTIONS FOR ADC's as well
+   -maybe just set them all as fine as possible so constants are easy?
 
 PERIPHERALS CHECKLIST
-ITEM		RECODED		TESTED
-MAP
-O2
+ITEM	RECODED	TESTED	TODO
+MAP	y		adjust MAPDelta, decide on resolution of adc
+INJ
+HES
 TPS
 ECT
 IAT
+O2
 FPS
-INJ
 
 -Data.cpp
  -change the 'values' struct to a string that is to be sent to serial print

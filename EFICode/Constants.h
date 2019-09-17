@@ -11,13 +11,13 @@ void lowerStartupMod();
 
 // Define all the pin numbers
 const int HES_Pin = 19;
-const int TPS_Pin = 2;
-const int ECT_Pin = 1;
-const int MAP_Pin = 5;
-const int IAT_Pin = 0;
-const int INJ_Pin = 45;
-const int FP_Pin = 47;
-const int FRS_Pin = 6;
+const int TPS_Pin = 13; // updated (analog)
+const int ECT_Pin = 19; // updated (analog)
+const int MAP_Pin = 16; // updated (analog)
+const int IAT_Pin = 18; // updated (analog)
+const int INJ_Pin = 31; // updated (digital)
+const int FP_Pin = 17;  // updated (analog)
+//const int FRS_Pin = 6; // don't have
 const int SP1 = 7;
 const int OIN1_Pin = SP1;
 const int OIN2_Pin = 4;
@@ -25,7 +25,13 @@ const int SP2 = 8;
 const int SP3 = 39;
 const int SP4 = 37;
 
-// Multiple by this number to convert analog readings to voltages.
+const double Vs_5 = 5.00; //Volts
+const double Vs_3v3 = 3.30; //Volts
+
+// Multiple by this number to convert analog readings to voltages from Op amps
+const double adcRef = 3.30; //Volts
+const double opampVoltageDivider = 1000.0 / (1000 + 470);
+const double adcToOpampVin = adcRef / (1023 * opampVoltageDivider);
 const double voltageConversion = 5.0 / 1023;
 
 // Constants for calculating estimated injection times.
