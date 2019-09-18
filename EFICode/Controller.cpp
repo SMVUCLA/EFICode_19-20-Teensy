@@ -156,9 +156,10 @@ void Controller::updateRPM() {
   //countRevolution() function associated with the interrupt
   interrupts();
   if (tempRev >= revsPerCalc) { 
-    RPM = getRPM(micros() - lastRPMCalcTime, tempRev); //Uses the previously determined value of revolutions to reduce
+    unsigned long currentRPMCalcTime = micros();
+    RPM = getRPM(currentRPMCalcTime - lastRPMCalcTime, tempRev); //Uses the previously determined value of revolutions to reduce
     //amount of noInterrupts() calls
-    lastRPMCalcTime = micros();
+    lastRPMCalcTime = currentRPMCalcTime;
     noInterrupts(); //To ensure that the interrupt of countRev doesn't get lost in case of bad timing of threads
     revolutions = 0; //Race Conditions Modification Problem
     interrupts();
@@ -206,9 +207,9 @@ void Controller::lookupPulseTime() {
     // Add extra fuel for starting
     if (startingRevolutions <= numRevsForStart)
     {
-        tempPulseTime *= startupModifier;
+        tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
     }
-    throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2
+    throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2 (THIS IS LIKELY A BUGGY FUNCTION)
     tempPulseTime *= throttleAdjustment;
     noInterrupts();
     injectorPulseTime = tempPulseTime * constModifier;
@@ -309,7 +310,7 @@ void Controller::checkEngineState() {
 
 const double startupModifierSlope = -0.0147;
 const double startupModifierInt = 5.5559;
-void Controller::setStartupModifier() {
+void Controller::setStartupModifier() { // SHOULDN'T THIS BE +
   startupModifier = startupModifierSlope * ECT * startupModifierInt;
 }
 

@@ -11,17 +11,23 @@ TODO:
 PERIPHERALS CHECKLIST
 ITEM	RECODED	TESTED	TODO
 MAP	y		adjust MAPDelta, decide on resolution of adc
-INJ
-HES
-TPS
-ECT
-IAT
+INJ	y		should be ok
+HES			setup on GP3, unknown sensor so not programmed
+TPS	y		set TPS_0Deg and TPS_90Deg
+ECT	y		tune constants (lower values for Voltage divider tend to be better), adjust adc resolution?
+IAT	y		tune constants, adjust adc resolution?
 O2
 FPS
 
 -Data.cpp
  -change the 'values' struct to a string that is to be sent to serial print
  -have data be sent back after every injection?
+ -information to send back:
+  -number of times a certain injection time value is used
+    -tells us where to focus tuning efforts
+  -the O-2 ratio for each data point
+  -actual ADC value for things like TPS
+ -create a method to fill sd card with data
 -micros() ROLLS OVER AT 1hr11min!!!!
   -account for this in code?
 

@@ -10,7 +10,7 @@ void dummy();
 void lowerStartupMod();
 
 // Define all the pin numbers
-const int HES_Pin = 19;
+const int HES_Pin = 10; // (GP3) updated (digital) 
 const int TPS_Pin = 13; // updated (analog)
 const int ECT_Pin = 19; // updated (analog)
 const int MAP_Pin = 16; // updated (analog)

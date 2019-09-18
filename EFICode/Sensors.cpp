@@ -10,19 +10,29 @@ int Controller::getRPM (long int timePassed, int rev) {
 }
 
 //TPS Measurement
+/*
 const double TPSConversion = .0019685;
 const double TPSOffset = -.33746;
+*/
+const int TPS_0Deg = 0;
+const int TPS_90Deg = 1023;
 
 double Controller::getTPS() {
-  // Gets throttle position based off of the percentage of throttle area open
-  // TODO: Create sin lookup table
+  // Gets throttle position as a percentage of open area
+  /*
   double newTPS = constrain(
     sin(TPSConversion * analogRead(TPS_Pin) + TPSOffset),
     MIN_TPS,
     MAX_TPS
     );
-  DTPS = (newTPS - TPS) / (micros() - lastThrottleMeasurementTime);
-  lastThrottleMeasurementTime = micros();
+  */
+  unsigned long currThrottleMeasurementTime = micros();
+  double newTPS = 
+    1 - cos(map(analogRead(TPS_Pin),TPS_0Deg,TPS_90Deg,0,HALF_PI)); // mapping ADC to degrees since:
+    								    //   angle ~ resistance of lower resistor (sum of div is const) ~ ADC
+								    //   where ~ means proportional
+  DTPS = (newTPS - TPS) / (currThrottleMeasurementTime - lastThrottleMeasurementTime);
+  lastThrottleMeasurementTime = currThrottleMeasurementTime;
   return newTPS;
 }
 
