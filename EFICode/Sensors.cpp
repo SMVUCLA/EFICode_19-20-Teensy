@@ -99,14 +99,14 @@ double Controller::getTemp(int pin) {
   //return tempA - tempB * sqrt(tempC - (tempGamma - x));
   return ((-tempBeta)-sqrt(pow(tempBeta,2)-4*tempAlpha*(tempGamma-x)))/(2 * tempAlpha);
 */
-  char index; // identify which constants to use
+  int index; // identify which constants to use
   switch(pin) {
-    case IAT: index = IAT_INDEX;
-    case ECT: index = ECT_INDEX;
+    case IAT_Pin: index = IAT_INDEX;
+    case ECT_Pin: index = ECT_INDEX;
     default:  index = ECT_INDEX; // just in case
   }
 
-  double tempR = R_div[index] / (adcMax/analogRead(pin) - 1); // find resistance of sensor
+  double tempR = R_div[index] / (maxADC/analogRead(pin) - 1); // find resistance of sensor
   return tempBeta[index] / (log(tempR) + tempConst[index]);   // return temperature
 }
 
