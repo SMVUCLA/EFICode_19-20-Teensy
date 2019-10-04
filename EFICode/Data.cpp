@@ -4,6 +4,7 @@
 #include "Constants.h"
 
 void Controller::sendCurrentData() {
+/*
   //Sends data on each of our sensors to Serial output
   struct values {
       unsigned long frontPad = 0x80000001;
@@ -18,19 +19,37 @@ void Controller::sendCurrentData() {
       long RPM;
       unsigned long backPad = 0x80000000;
   } values;
-
   //TODO: Convert to micros
+  //time: %10i
   values.time = micros();
+  //totalRevs: %6i
   values.totalRevs = totalRevolutions;
+  //%3i and ((ect - int(ect))1000)%3i
   values.ECT = ECT;
+  //%3i and ((ect - int(ect))1000)%3i
   values.IAT = IAT;
+  //%3i and ((` - int(ect))1000)%3i
   values.MAP = MAP;
   values.TPS = TPS;
   values.AFR = AFR;
   values.RPM = (long) RPM;
   values.totalPulseTime = totalPulseTime;
-  Serial.write((byte*)&values, 44);
+  Serial.write((byte*)&values, 44);*/
+
+  char*[80] toSend;
+  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%04.2f:%05i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+  	micros(), 
+	totalRevolutions, 
+	ECT, 
+	IAT, 
+	MAP, 
+	TPS, 
+	AFR, 
+	RPM, 
+	totalPulseTime);
+  Serial.write(toSend);
 }
+
 
 void Controller::trySendingData() {
   if (currentlySendingData) {
