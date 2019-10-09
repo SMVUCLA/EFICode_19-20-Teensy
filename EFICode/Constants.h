@@ -10,20 +10,20 @@ void dummy();
 void lowerStartupMod();
 
 // Define all the pin numbers
-const int HES_Pin = 10; // (GP3) updated (digital) 
-const int TPS_Pin = 13; // updated (analog)
-const int ECT_Pin = 19; // updated (analog)
-const int MAP_Pin = 16; // updated (analog)
-const int IAT_Pin = 18; // updated (analog)
-const int INJ_Pin = 31; // updated (digital)
-const int FP_Pin = 17;  // updated (analog)
+#define HES_Pin A10; // (GP3) updated (digital) 
+#define TPS_Pin A13; // updated (analog)
+#define ECT_Pin A19; // updated (analog)
+#define MAP_Pin A16; // updated (analog)
+#define IAT_Pin A18; // updated (analog)
+#define INJ_Pin 31; // updated (digital)
+#define FP_Pin A17;  // updated (analog)
 //const int FRS_Pin = 6; // don't have
-const int SP1 = 7;
-const int OIN1_Pin = SP1;
-const int OIN2_Pin = 4;
-const int SP2 = 8;
-const int SP3 = 39;
-const int SP4 = 37;
+#define SP1 7;
+#define OIN1_Pin SP1;
+#define OIN2_Pin 4;
+#define SP2 8;
+#define SP3 39;
+#define SP4 37;
 
 const double Vs_5 = 5.00; //Volts
 const double Vs_3v3 = 3.30; //Volts
