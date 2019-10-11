@@ -180,7 +180,7 @@ long Controller::interpolate2D(int blrow, int blcol, double x, double y) {
     injectorBasePulseTimes[blrow+1][blcol+1]*(y)*(x);
   }
 
-void Controller::lookupPulseTime() {
+void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION******
     // Map the MAP and RPM readings to the scale of 
     double scaledMAP = map(MAPAvg->getData(), minMAP, maxMAP, 0, maxTableRowIndex); //number from 0 - numTableRows-1
     double scaledRPM = map(RPM, minRPM, maxRPM, 0, maxTableColIndex); //number from 0 - numTableCols-1

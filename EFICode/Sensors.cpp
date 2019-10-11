@@ -14,8 +14,8 @@ int Controller::getRPM (long int timePassed, int rev) {
 const double TPSConversion = .0019685;
 const double TPSOffset = -.33746;
 */
-const int TPS_0Deg = 0;
-const int TPS_90Deg = 1023;
+const int TPS_0Deg = 69;
+const int TPS_90Deg = 885;
 
 double Controller::getTPS() {
   // Gets throttle position as a percentage of open area
@@ -27,10 +27,14 @@ double Controller::getTPS() {
     );
   */
   unsigned long currThrottleMeasurementTime = micros();
-  double newTPS = 
-    1 - cos(map(analogRead(TPS_Pin),TPS_0Deg,TPS_90Deg,0,HALF_PI)); // mapping ADC to degrees since:
+  // ******NOTE: This is not a trig function so acceleration might be in excess*******
+  double newTPS = ((analogRead(TPS_Pin)-TPS_0Deg)/TPS_90Deg);//1 - cos(((analogRead(TPS_Pin)-TPS_0Deg)/TPS_90Deg)*HALF_PI); // mapping ADC to degrees since:
     								    //   angle ~ resistance of lower resistor (sum of div is const) ~ ADC
-								    //   where ~ means proportional
+								    //   where ~ means proportiona
+  if(newTPS < 0)
+    newTPS = 0;
+  if(newTPS > 1)
+    newTPS = 1;
   DTPS = (newTPS - TPS) / (currThrottleMeasurementTime - lastThrottleMeasurementTime);
   lastThrottleMeasurementTime = currThrottleMeasurementTime;
   return newTPS;
@@ -119,7 +123,7 @@ double Controller::getTemp(int pin) {
 
 // MPX4115A MAP sensor calibration
 const double MAPVs = Vs_5;
-const double MAPDelta = 0.0; // should be between +/- 0.0675 volts (1.5 * 0.009 * Vs where Vs is 5)
+const double MAPDelta = 0.045; // should be between +/- 0.0675 volts (1.5 * 0.009 * Vs where Vs is 5)
 const double MAPSlope = 1E3/(MAPVs*0.009);  //Pa / Volt
 const double MAPOffset = 1E3*MAPDelta/(MAPVs*0.009) + 1E3*0.095/0.009;   //Pa
 const double MAPConversion = MAPSlope * adcToOpampVin;    // Pascals / 1023
