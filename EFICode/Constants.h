@@ -19,8 +19,8 @@ void lowerStartupMod();
 #define FP_Pin A17  // updated (analog)
 //const int FRS_Pin = 6; // don't have
 #define SP1 7
-#define OIN1_Pin SP1
-#define OIN2_Pin 4
+#define OIN1_Pin A14
+#define OIN2_Pin A15
 #define SP2 8
 #define SP3 39
 #define SP4 37
