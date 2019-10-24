@@ -10,7 +10,7 @@ void dummy();
 void lowerStartupMod();
 
 // Define all the pin numbers
-#define HES_Pin 10 // (GP3) updated (digital) 
+#define HES_Pin 36 // (GP3) updated (digital) 
 #define TPS_Pin A13 // updated (analog)
 #define ECT_Pin A19 // updated (analog)
 #define MAP_Pin A16 // updated (analog)
