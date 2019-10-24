@@ -16,8 +16,7 @@ HES			setup on GP3, unknown sensor so not programmed
 TPS	y	y(sorta	1:1 map, not a map of area
 ECT	y		tune constants (lower values for Voltage divider tend to be better), adjust adc resolution?
 IAT	y		tune constants, adjust adc resolution?
-O2	n/a		code unchanged, should still work
-FPS
+O1	y	y	code unchanged, should still work
 
 -Data.cpp
  -change the 'values' struct to a string that is to be sent to serial print
