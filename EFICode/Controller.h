@@ -75,7 +75,7 @@ public:
   // sets the INJisDisabled flag to true.
   void disableINJ();
 
-  int getRPM (long int timePassed, int rev);
+  long getRPM (long int timePassed, int rev);
   double getTPS();
   double getTemp(int pin);
   double getMAP();

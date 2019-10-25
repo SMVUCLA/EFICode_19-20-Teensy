@@ -311,7 +311,7 @@ void Controller::checkEngineState() {
 const double startupModifierSlope = -0.0147;
 const double startupModifierInt = 5.5559;
 void Controller::setStartupModifier() { // SHOULDN'T THIS BE +
-  startupModifier = startupModifierSlope * ECT * startupModifierInt;
+  startupModifier = startupModifierSlope * ECT + startupModifierInt;
 }
 
 bool Controller::detectEngineOff() {

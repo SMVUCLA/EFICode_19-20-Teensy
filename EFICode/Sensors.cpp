@@ -5,7 +5,7 @@
 #include "math.h"
 
 // timepassed is in microseconds
-int Controller::getRPM (long int timePassed, int rev) {
+long Controller::getRPM (long int timePassed, int rev) {
   return (60000000.0 * rev) / (timePassed);
 }
 
