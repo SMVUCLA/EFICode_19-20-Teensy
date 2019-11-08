@@ -183,7 +183,7 @@ class TimerThree
 	setPeriod(microseconds);
     }
     void setPeriod(unsigned long microseconds) __attribute__((always_inline)) {
-	const unsigned long cycles = (F_TIMER / 2000000) * microseconds;
+	const unsigned long cycles = (F_TIMER / 1000000) * microseconds;
 
   /*
   // This code does not work properly in all cases :(
@@ -351,4 +351,3 @@ class TimerThree
 extern TimerThree Timer3;
 
 #endif
-

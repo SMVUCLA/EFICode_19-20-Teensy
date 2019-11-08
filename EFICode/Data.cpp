@@ -1,5 +1,4 @@
 #include "Controller.h"
-
 #include "Arduino.h"
 #include "Constants.h"
 
@@ -36,8 +35,8 @@ void Controller::sendCurrentData() {
   values.totalPulseTime = totalPulseTime;
   Serial.write((byte*)&values, 44);*/
 
-  char toSend [80];
-  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%04.2f:%05i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+  char toSend [100];
+  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
   	micros(), 
 	totalRevolutions, 
 	ECT, 
@@ -46,7 +45,8 @@ void Controller::sendCurrentData() {
 	TPS, 
 	AFR, 
 	RPM, 
-	totalPulseTime);
+  injectorPulseTime,
+	lastPulse);
   Serial.write(toSend);
 }
 

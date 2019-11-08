@@ -76,7 +76,7 @@ void Controller::initializeParameters() {
 
     // True   -> Start with data reporting on.
     // False  -> Start with data reporting off.
-    currentlySendingData = false;
+    currentlySendingData = true;
 
     // If false, doesn't use AFR feedback.
     AFRFeedbackisEnabled = false;
@@ -207,7 +207,8 @@ void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION*****
     // Add extra fuel for starting
     if (startingRevolutions <= numRevsForStart)
     {
-        tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
+        //uncomment later
+        //tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
     }
     throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2 (THIS IS LIKELY A BUGGY FUNCTION)
     tempPulseTime *= throttleAdjustment;
@@ -296,10 +297,10 @@ void Controller::calculateBasePulseTime(bool singleVal, int row, int col) {
 void Controller::checkEngineState() {
   if (detectEngineOff()) {
     if (revsPerCalc > 0)
-    {
-        revolutions = 0;
+    {   //uncomment later
+        //revolutions = 0;
         startingRevolutions = 0;
-        RPM = 0;
+        //RPM = 0;
         lastRPMCalcTime = micros();
     }
     if (!INJisDisabled) {
@@ -310,7 +311,7 @@ void Controller::checkEngineState() {
 
 const double startupModifierSlope = -0.0147;
 const double startupModifierInt = 5.5559;
-void Controller::setStartupModifier() { // SHOULDN'T THIS BE +
+void Controller::setStartupModifier() { 
   startupModifier = startupModifierSlope * ECT + startupModifierInt;
 }
 
@@ -331,4 +332,3 @@ void Controller::raiseStartupModifier()
 {
   startupModifier += 0.05;
 }
-

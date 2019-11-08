@@ -43,6 +43,9 @@ void setup() {
   
   // Immediately stop the timer.
   Timer3.stop();
+
+  pinMode(LED_1, OUTPUT);  
+  digitalWrite(LED_1, HIGH);
 }
 
 void loop() {
@@ -76,6 +79,11 @@ void countRev() {
 }
 
 void handle_pulseTimerTimeout() {
+  if(digitalRead(LED_1) == 0){
+    digitalWrite(LED_1, HIGH);
+  }else{
+    digitalWrite(LED_1, LOW);
+  }
   c->pulseOff();
 }
 

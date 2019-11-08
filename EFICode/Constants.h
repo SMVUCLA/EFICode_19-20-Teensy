@@ -25,6 +25,8 @@ void lowerStartupMod();
 #define SP3 39
 #define SP4 37
 
+#define LED_1 5
+
 const double Vs_5 = 5.00; //Volts
 const double Vs_3v3 = 3.30; //Volts
 
