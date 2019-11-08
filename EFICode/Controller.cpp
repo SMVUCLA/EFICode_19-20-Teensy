@@ -207,8 +207,7 @@ void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION*****
     // Add extra fuel for starting
     if (startingRevolutions <= numRevsForStart)
     {
-        //uncomment later
-        //tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
+        tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
     }
     throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2 (THIS IS LIKELY A BUGGY FUNCTION)
     tempPulseTime *= throttleAdjustment;
@@ -297,10 +296,10 @@ void Controller::calculateBasePulseTime(bool singleVal, int row, int col) {
 void Controller::checkEngineState() {
   if (detectEngineOff()) {
     if (revsPerCalc > 0)
-    {   //uncomment later
-        //revolutions = 0;
+    {   //comment out revolutions and RPM when testing without the engine on
+        revolutions = 0;
         startingRevolutions = 0;
-        //RPM = 0;
+        RPM = 0;
         lastRPMCalcTime = micros();
     }
     if (!INJisDisabled) {
