@@ -81,7 +81,7 @@ const double tempBeta[2] = {3988,3988}; // tolerance: {+/-1%,+/-1.5%}
 const double T_0 = 298.15; // temp in Kelvin at which R_0 values are taken
 const double lnR_0[2] = {9.21034,8.4849};//8.45531}; // {ln(10000 (10000 +/-1%)),ln(4700 (4559 to 4841))}
 const double tempConst[2] = {tempBeta[IAT_INDEX]/T_0 - lnR_0[IAT_INDEX], tempBeta[ECT_INDEX]/T_0 - lnR_0[ECT_INDEX]};
-const double R_div[2] = {10000,10000}; // resistance of other resistor in voltage divider
+const double R_div[2] = {9300,10000}; // resistance of other resistor in voltage divider
 
 double Controller::getTemp(int pin) {
 /*
@@ -106,12 +106,15 @@ double Controller::getTemp(int pin) {
   int index; // identify which constants to use
   switch(pin) {
     case IAT_Pin: index = IAT_INDEX;
+    break;
     case ECT_Pin: index = ECT_INDEX;
+    break;
     default:  index = ECT_INDEX; // just in case
   }
 
   double tempR = R_div[index] / (maxADC/analogRead(pin) - 1); // find resistance of sensor
   return tempBeta[index] / (log(tempR) + tempConst[index]);   // return temperature
+
 }
 
 //MAP Measurement
