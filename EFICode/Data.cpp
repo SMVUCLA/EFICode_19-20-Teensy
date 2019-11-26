@@ -41,7 +41,7 @@ void Controller::sendCurrentData() {
 // -whether we are still on startup cycles
 // -engine on? (or just use RPM = 0)
   char toSend [500];
-  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02i:%02i:%01.3f:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
   	micros(), 
 	revolutions, 
 	ECT, 
@@ -52,7 +52,11 @@ void Controller::sendCurrentData() {
 	AFR, 
 	RPM, 
   injectorPulseTime,
-	lastPulse);
+	lastPulse,
+	mapIndex, 
+	rpmIndex,
+	startupModifier,
+	startingRevolutions <= numRevsForStart);
   Serial.write(toSend);
 }
 

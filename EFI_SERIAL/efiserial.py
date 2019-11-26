@@ -21,7 +21,10 @@ sensors = {k: [] for k in
    'TPS',
    'AFR',
    'injectorPulseTime',
-   'lastPulse']}
+   'lastPulse',
+   'MAP_INDEX',
+   'RPM_INDEX',
+   'STARTING_BOOL']}
 
 global dataFile
 saveOnExit = False
