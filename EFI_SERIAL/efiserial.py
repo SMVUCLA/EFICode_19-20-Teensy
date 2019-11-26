@@ -19,8 +19,8 @@ snsrs = {k: [] for k in
    'MAP',
    'TPS',
    'AFR',
-   'injectionTime',
-   'RPM']}
+   'injectorPulseTime',
+   'lastPulse']}
 
 global dataFile
 saveOnExit = False
