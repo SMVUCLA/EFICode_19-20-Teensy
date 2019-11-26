@@ -49,7 +49,7 @@ void Controller::initializeParameters() {
 
     // Number of revolutions that must pass before recalculating RPM.
     revsPerCalc = 5;
-    constModifier = 0.70;
+    constModifier = 1.0;
     
     // Initialize AFR values.
     AFR = 0;
