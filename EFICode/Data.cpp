@@ -35,13 +35,19 @@ void Controller::sendCurrentData() {
   values.totalPulseTime = totalPulseTime;
   Serial.write((byte*)&values, 44);*/
 
-  char toSend [100];
-  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+
+// TODO:
+// -last row and column used in tables ( maybe send back actual values used)
+// -whether we are still on startup cycles
+// -engine on? (or just use RPM = 0)
+  char toSend [500];
+  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
   	micros(), 
 	revolutions, 
 	ECT, 
 	IAT, 
 	MAP, 
+	MAPAvg->getData(),
 	TPS, 
 	AFR, 
 	RPM, 
