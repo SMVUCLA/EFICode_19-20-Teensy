@@ -90,6 +90,9 @@ def main():
 
   # collect and log data
   global sensors
+  
+  numMismatch = 0
+  maxMismatch = 5
 
   with open(dataFile, 'wb') as df:
     while True:
@@ -106,9 +109,15 @@ def main():
           continue
         vals = line.split(b':')
         if len(vals) != len(sensors.keys()):
-          print('mismatch in sensor number')
-          input('press enter to continue')
-          continue
+          numMismatch += 1
+          if numMismatch >= maxMismatch:
+            numMismatch = 0
+            print('mismatch in sensor number')
+            input('press enter to continue')
+            continue
+          else:
+            continue;
+        numMismatch = 0 # if we get here, no consecutive mismatch
         for k in range(0,len(sensors.keys())):
           sensors[list(sensors.keys())[k]].append(float(vals[k]))
         for k in sensors:
