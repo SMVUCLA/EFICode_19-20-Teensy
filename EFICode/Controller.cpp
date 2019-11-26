@@ -49,7 +49,7 @@ void Controller::initializeParameters() {
 
     // Number of revolutions that must pass before recalculating RPM.
     revsPerCalc = 5;
-    constModifier = 1.10;
+    constModifier = 0.70;
     
     // Initialize AFR values.
     AFR = 0;
@@ -96,6 +96,7 @@ void Controller::initializeParameters() {
 }
 
 void Controller::countRevolution() {
+  magnetsHit++;
   if (magnetsHit >= numMagnets - 1) {
       // Enable the injector if it is disabled.
       if (INJisDisabled) {
@@ -114,9 +115,6 @@ void Controller::countRevolution() {
       }
       magnetsHit = 0;
   }
-  else {
-      magnetsHit++;
-  }
 }
 
 
@@ -133,7 +131,9 @@ void Controller::disableINJ() {
 }
 
 void Controller::pulseOn() {
-    Timer3.setPeriod(injectorPulseTime);
+        
+        
+             Timer3.setPeriod(injectorPulseTime);
     digitalWrite(INJ_Pin, HIGH);
     Timer3.start();
     noInterrupts(); //To ensure when lastPulse is used in pulseOff(), it isn't read as lastPulse is getting modified

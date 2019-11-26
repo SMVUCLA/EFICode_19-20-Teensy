@@ -38,7 +38,7 @@ void Controller::sendCurrentData() {
   char toSend [100];
   sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
   	micros(), 
-	revolutions, 
+	totalRevolutions, 
 	ECT, 
 	IAT, 
 	MAP, 
