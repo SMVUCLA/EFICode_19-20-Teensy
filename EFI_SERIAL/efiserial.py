@@ -20,10 +20,12 @@ sensors = {k: [] for k in
    'MAP_AVG',
    'TPS',
    'AFR',
+   'RPM',
    'injectorPulseTime',
    'lastPulse',
    'MAP_INDEX',
    'RPM_INDEX',
+   'STARTUP_MOD',
    'STARTING_BOOL']}
 
 global dataFile
