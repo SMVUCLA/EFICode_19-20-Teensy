@@ -11,12 +11,13 @@ config = 'config.ini'
 
 configContents = "[GEN]\nCOM = 1\nBAUD = 9600\nFILENAMEDATE = n"
 
-snsrs = {k: [] for k in 
-  ['time',
+sensors = {k: [] for k in 
+  ['micros',
    'totalRevs',
    'ECT',
    'IAT',
    'MAP',
+   'MAP_AVG',
    'TPS',
    'AFR',
    'injectorPulseTime',
@@ -83,7 +84,7 @@ def main():
   saveOnExit = True
 
   # collect and log data
-  global snsrs
+  global sensors
 
   with open(dataFile, 'wb') as df:
     while True:
@@ -99,19 +100,19 @@ def main():
           print('empty buffer')
           continue
         vals = line.split(b':')
-        if len(vals) != len(snsrs.keys()):
+        if len(vals) != len(sensors.keys()):
           print('mismatch in sensor number')
           input('press enter to continue')
           continue
-        for k in range(0,len(snsrs.keys())):
-          snsrs[list(snsrs.keys())[k]].append(float(vals[k]))
-        for k in snsrs:
-          print(k + ": " + str(snsrs[k][-1]))
+        for k in range(0,len(sensors.keys())):
+          sensors[list(sensors.keys())[k]].append(float(vals[k]))
+        for k in sensors:
+          print(k + ": " + str(sensors[k][-1]))
         print('saving to: ' + dataFile)
-        print('len of TPS: ' + str(len(snsrs['TPS'])))
+        print('len of TPS: ' + str(len(sensors['TPS'])))
         print('ctrl-c to save and exit')
       except KeyboardInterrupt:
-        pickle.dump(snsrs, df) # save file
+        pickle.dump(sensors, df) # save file
         exit()
     
     
