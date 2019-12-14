@@ -108,6 +108,7 @@ private:
   long lastRPMCalcTime;
   long injectorPulseTime;
   int delayCount;
+  bool enableSendingData;
   bool currentlySendingData;
   long int minTimePerSampleReported;
   long lastSerialOutputTime;

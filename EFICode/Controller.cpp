@@ -44,8 +44,10 @@ void Controller::initializeParameters() {
     totalRevolutions = 0;
     magnetsHit = 0;
 
+/*  SENDING BACK DATA ON TIMER1
     // Set the max speed at which data is reported
     minTimePerSampleReported = 1E3;  //In microseconds
+*/
 
     // Number of revolutions that must pass before recalculating RPM.
     revsPerCalc = 5;
@@ -76,7 +78,8 @@ void Controller::initializeParameters() {
 
     // True   -> Start with data reporting on.
     // False  -> Start with data reporting off.
-    currentlySendingData = true;
+    enableSendingData = true;
+    currentlySendingData = enableSendingData;
 
     // If false, doesn't use AFR feedback.
     AFRFeedbackisEnabled = false;
@@ -131,14 +134,14 @@ void Controller::disableINJ() {
 }
 
 void Controller::pulseOn() {
-        
-        
-             Timer3.setPeriod(injectorPulseTime);
-    digitalWrite(INJ_Pin, HIGH);
-    Timer3.start();
-    noInterrupts(); //To ensure when lastPulse is used in pulseOff(), it isn't read as lastPulse is getting modified
-    lastPulse = micros(); //Race Conditions Problem
-    interrupts();
+  // disable data sending
+  currentlySendingData = false;
+  Timer3.setPeriod(injectorPulseTime);
+  digitalWrite(INJ_Pin, HIGH);
+  Timer3.start();
+  noInterrupts(); //To ensure when lastPulse is used in pulseOff(), it isn't read as lastPulse is getting modified
+  lastPulse = micros(); //Race Conditions Problem
+  interrupts();
 }
 
 void Controller::pulseOff() {
@@ -148,6 +151,9 @@ void Controller::pulseOff() {
 
   // Save the amount of time the injector pin spent HIGH.
   totalPulseTime += (micros() - lastPulse);
+
+  // Let data be send again
+  currentlySendingData = enableSendingData;
 }
 
 void Controller::updateRPM() {

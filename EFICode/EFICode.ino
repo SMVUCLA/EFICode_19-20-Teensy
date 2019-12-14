@@ -1,7 +1,7 @@
-                                                                                                                                                                            #include "Controller.h"
-
+#include "Controller.h"                                                                                                                                                                        #include "Controller.h
 #include "Constants.h"
 #include "TimerThree.h"
+#include "TimerOne.h"
 //#include "EEPROM.h"
 
 Controller *c;
@@ -37,13 +37,20 @@ void setup() {
   Timer3.detachInterrupt();
   Timer3.attachInterrupt(handle_pulseTimerTimeout);
 
+  // Immediately stop the timer.
+  Timer3.stop();
+
   // FOR CHANGING PARAMETERS WITH BUTTON PRESSES
   //attachInterrupt(digitalPinToInterrupt(2), lowerStartupMod, FALLING);
   //attachInterrupt(digitalPinToInterrupt(3), raiseStartupMod, FALLING);
   
-  // Immediately stop the timer.
-  Timer3.stop();
-
+  Timer1.attachInterrupt(dummy);
+  Timer1.detachInterrupt();
+  Timer1.attachInterrupt(handle_sendData);
+  
+  Timer1.setPeriod(DATA_RATE_PERIOD);
+  Timer1.start();
+  
   pinMode(LED_1, OUTPUT);  
   digitalWrite(LED_1, HIGH);
 }
@@ -65,13 +72,8 @@ void loop() {
   // Checks the status of the engine. e.g., detects whether the engine is on or off.
   c->checkEngineState();
 
-  // Attempt to send sensor data to the DAQ system. Will only occur if the
-  // currentlySendingData flag is set to true. This flag is set by sending 
-  // the ID 1 signal to the controller.
-  c->trySendingData();
-
   // Check for commands from Serial port.
-  c->getCommand();
+  //c->getCommand();
 }
 
 void countRev() {
@@ -79,12 +81,22 @@ void countRev() {
 }
 
 void handle_pulseTimerTimeout() {
-  if(digitalRead(LED_1) == 0){
+//toggle every time timer is stopped
+  if(digitalRead(LED_1) == 0){ 
     digitalWrite(LED_1, HIGH);
   }else{
     digitalWrite(LED_1, LOW);
   }
   c->pulseOff();
+}
+
+void handle_sendData() {
+  // Attempt to send sensor data to the DAQ system. Will only occur if the
+  // currentlySendingData flag is set to true. This flag is set by sending 
+  // the ID 1 signal to the controller.
+  c->trySendingData();
+
+  Timer1.start();
 }
 
 void lowerStartupMod() {

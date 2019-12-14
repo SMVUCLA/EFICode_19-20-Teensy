@@ -3,6 +3,37 @@
 #include "Constants.h"
 
 void Controller::sendCurrentData() {
+// TODO:
+// -last row and column used in tables ( maybe send back actual values used)
+// -whether we are still on startup cycles
+// -engine on? (or just use RPM = 0)
+  char toSend [500];
+  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02i:%02i:%01.3f:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+  	micros(), 
+	totalRevolutions, 
+	ECT, 
+	IAT, 
+	MAP, 
+	MAPAvg->getData(),
+	TPS, 
+	AFR, 
+	RPM, 
+  injectorPulseTime,
+	lastPulse,
+	mapIndex, 
+	rpmIndex,
+	startupModifier,
+	startingRevolutions <= numRevsForStart);
+  Serial.write(toSend);
+}
+
+
+void Controller::trySendingData() {
+  if (currentlySendingData) {
+      sendCurrentData();
+    }
+  }
+// OLD CODE
 /*
   //Sends data on each of our sensors to Serial output
   struct values {
@@ -36,40 +67,6 @@ void Controller::sendCurrentData() {
   Serial.write((byte*)&values, 44);*/
 
 
-// TODO:
-// -last row and column used in tables ( maybe send back actual values used)
-// -whether we are still on startup cycles
-// -engine on? (or just use RPM = 0)
-  char toSend [500];
-  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02i:%02i:%01.3f:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
-  	micros(), 
-	totalRevolutions, 
-	ECT, 
-	IAT, 
-	MAP, 
-	MAPAvg->getData(),
-	TPS, 
-	AFR, 
-	RPM, 
-  injectorPulseTime,
-	lastPulse,
-	mapIndex, 
-	rpmIndex,
-	startupModifier,
-	startingRevolutions <= numRevsForStart);
-  Serial.write(toSend);
-}
-
-
-void Controller::trySendingData() {
-  if (currentlySendingData) {
-    if (micros() - lastSerialOutputTime >= minTimePerSampleReported) {
-      sendCurrentData();
-      lastSerialOutputTime = micros();
-    }
-  }
-}
-
 // OBSOLETE! KEPT FOR REFERENCE!
 //void Controller::printEndingData() {
 //  unsigned long sumPulse = 0;
@@ -88,4 +85,202 @@ void Controller::trySendingData() {
 //  Serial.println("Total     : " + String(sumPulse));
 //  Serial.println("Under 3000: " + String(pulseUnder3000));
 //  Serial.end();
+/*
+  //Sends data on each of our sensors to Serial output
+  struct values {
+      unsigned long frontPad = 0x80000001;
+      unsigned long time;
+      unsigned long totalRevs;
+      float ECT;
+      float IAT;
+      float MAP;
+      float TPS;
+      float AFR;
+      float totalPulseTime;
+      long RPM;
+      unsigned long backPad = 0x80000000;
+  } values;
+  //TODO: Convert to micros
+  //time: %10i
+  values.time = micros();
+  //totalRevs: %6i
+  values.totalRevs = totalRevolutions;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.ECT = ECT;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.IAT = IAT;
+  //%3i and ((` - int(ect))1000)%3i
+  values.MAP = MAP;
+  values.TPS = TPS;
+  values.AFR = AFR;
+  values.RPM = (long) RPM;
+  values.totalPulseTime = totalPulseTime;
+  Serial.write((byte*)&values, 44);*/
+
+
+/*
+  //Sends data on each of our sensors to Serial output
+  struct values {
+      unsigned long frontPad = 0x80000001;
+      unsigned long time;
+      unsigned long totalRevs;
+      float ECT;
+      float IAT;
+      float MAP;
+      float TPS;
+      float AFR;
+      float totalPulseTime;
+      long RPM;
+      unsigned long backPad = 0x80000000;
+  } values;
+  //TODO: Convert to micros
+  //time: %10i
+  values.time = micros();
+  //totalRevs: %6i
+  values.totalRevs = totalRevolutions;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.ECT = ECT;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.IAT = IAT;
+  //%3i and ((` - int(ect))1000)%3i
+  values.MAP = MAP;
+  values.TPS = TPS;
+  values.AFR = AFR;
+  values.RPM = (long) RPM;
+  values.totalPulseTime = totalPulseTime;
+  Serial.write((byte*)&values, 44);*/
+
+
+/*
+  //Sends data on each of our sensors to Serial output
+  struct values {
+      unsigned long frontPad = 0x80000001;
+      unsigned long time;
+      unsigned long totalRevs;
+      float ECT;
+      float IAT;
+      float MAP;
+      float TPS;
+      float AFR;
+      float totalPulseTime;
+      long RPM;
+      unsigned long backPad = 0x80000000;
+  } values;
+  //TODO: Convert to micros
+  //time: %10i
+  values.time = micros();
+  //totalRevs: %6i
+  values.totalRevs = totalRevolutions;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.ECT = ECT;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.IAT = IAT;
+  //%3i and ((` - int(ect))1000)%3i
+  values.MAP = MAP;
+  values.TPS = TPS;
+  values.AFR = AFR;
+  values.RPM = (long) RPM;
+  values.totalPulseTime = totalPulseTime;
+  Serial.write((byte*)&values, 44);*/
+
+
+/*
+  //Sends data on each of our sensors to Serial output
+  struct values {
+      unsigned long frontPad = 0x80000001;
+      unsigned long time;
+      unsigned long totalRevs;
+      float ECT;
+      float IAT;
+      float MAP;
+      float TPS;
+      float AFR;
+      float totalPulseTime;
+      long RPM;
+      unsigned long backPad = 0x80000000;
+  } values;
+  //TODO: Convert to micros
+  //time: %10i
+  values.time = micros();
+  //totalRevs: %6i
+  values.totalRevs = totalRevolutions;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.ECT = ECT;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.IAT = IAT;
+  //%3i and ((` - int(ect))1000)%3i
+  values.MAP = MAP;
+  values.TPS = TPS;
+  values.AFR = AFR;
+  values.RPM = (long) RPM;
+  values.totalPulseTime = totalPulseTime;
+  Serial.write((byte*)&values, 44);*/
+
+
+/*
+  //Sends data on each of our sensors to Serial output
+  struct values {
+      unsigned long frontPad = 0x80000001;
+      unsigned long time;
+      unsigned long totalRevs;
+      float ECT;
+      float IAT;
+      float MAP;
+      float TPS;
+      float AFR;
+      float totalPulseTime;
+      long RPM;
+      unsigned long backPad = 0x80000000;
+  } values;
+  //TODO: Convert to micros
+  //time: %10i
+  values.time = micros();
+  //totalRevs: %6i
+  values.totalRevs = totalRevolutions;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.ECT = ECT;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.IAT = IAT;
+  //%3i and ((` - int(ect))1000)%3i
+  values.MAP = MAP;
+  values.TPS = TPS;
+  values.AFR = AFR;
+  values.RPM = (long) RPM;
+  values.totalPulseTime = totalPulseTime;
+  Serial.write((byte*)&values, 44);*/
+
+
+/*
+  //Sends data on each of our sensors to Serial output
+  struct values {
+      unsigned long frontPad = 0x80000001;
+      unsigned long time;
+      unsigned long totalRevs;
+      float ECT;
+      float IAT;
+      float MAP;
+      float TPS;
+      float AFR;
+      float totalPulseTime;
+      long RPM;
+      unsigned long backPad = 0x80000000;
+  } values;
+  //TODO: Convert to micros
+  //time: %10i
+  values.time = micros();
+  //totalRevs: %6i
+  values.totalRevs = totalRevolutions;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.ECT = ECT;
+  //%3i and ((ect - int(ect))1000)%3i
+  values.IAT = IAT;
+  //%3i and ((` - int(ect))1000)%3i
+  values.MAP = MAP;
+  values.TPS = TPS;
+  values.AFR = AFR;
+  values.RPM = (long) RPM;
+  values.totalPulseTime = totalPulseTime;
+  Serial.write((byte*)&values, 44);*/
+
+
 //}
