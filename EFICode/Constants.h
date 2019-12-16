@@ -78,8 +78,8 @@ const int MIN_TPS = 0;
 const int MAX_TPS = 1;
 
 // Define the BAUD_RATE to communicate with.
-const unsigned long BAUD_RATE = 921600; // In bits per second;
-const int DATA_RATE_PERIOD = 1E5; // send back data every 100 ms
+const unsigned long BAUD_RATE = 115200; // In bits per second;
+const int DATA_RATE_PERIOD = 100E3; // send back data every 50 ms
 
 // Engine is considered off if it has RPM less than the minimum RPM.
 const int SHUTOFF_RPM = minRPM;

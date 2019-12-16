@@ -25,6 +25,7 @@ def main():
   plt.hist2d(sensors['MAP_INDEX'],sensors['RPM_INDEX'])
   plt.colorbar()
   plt.grid()
+  plt.title('RPM_INDEX vs MAP_INDEX')
 
   ms = sensors['micros']
   ipt = sensors['injectorPulseTime']
@@ -37,9 +38,11 @@ def main():
   plt.figure(2)
   plt.scatter(ms, ipt)
   plt.grid()
+  plt.title('Injection Time vs Micros')
  
   plt.figure(3)
   plt.scatter(range(len(ms)), ms)
+  plt.title('Micros vs len(micros)')
   plt.show()
 
 if __name__ == "__main__":

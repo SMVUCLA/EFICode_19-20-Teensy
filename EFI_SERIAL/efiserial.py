@@ -29,8 +29,6 @@ sensors = {k: [] for k in
    'STARTING_BOOL',
    'INJECTED']}
 
-saveOnExit = False
-
 ser = serial.Serial()
 
 def main():
@@ -83,52 +81,53 @@ def main():
       cnt += 1
       clear()
 
-  # we can save to a file now
-  global saveOnExit
-  saveOnExit = True
-
   # collect and log data
   global sensors
   
   numMismatch = 0
   maxMismatch = 5
 
-  with open(dataPath, 'wb') as df:
-    while True:
+  allKeys = list(sensors.keys())
+  while True:
+    try:
+
       try:
-        try:
-          line = ser.readline()
-        except:
-          clear()
-          print('error')
-          continue
+        line = ser.readline()
+      except:
         clear()
-        if line == '':
-          print('empty buffer')
+        print('error')
+        continue
+
+      if line == '':
+        print('empty buffer')
+        continue
+
+      vals = line.split(b':')
+      if len(vals) != len(allKeys):
+        numMismatch += 1
+        if numMismatch >= maxMismatch:
+          numMismatch = 0
+          print('mismatch in sensor number')
+          input('press enter to continue')
           continue
-        vals = line.split(b':')
-        if len(vals) != len(sensors.keys()):
-          numMismatch += 1
-          if numMismatch >= maxMismatch:
-            numMismatch = 0
-            print('mismatch in sensor number')
-            input('press enter to continue')
-            continue
-          else:
-            continue;
-        numMismatch = 0 # if we get here, no consecutive mismatch
-        for k in range(0,len(sensors.keys())):
-          sensors[list(sensors.keys())[k]].append(float(vals[k]))
-        for k in sensors:
-          print(k + ": " + str(sensors[k][-1]))
-        print('saving to: ' + dataPath)
-        print('len of TPS: ' + str(len(sensors['TPS'])))
-        print('ctrl-c to save and exit')
-      except KeyboardInterrupt:
+        else:
+          continue;
+      numMismatch = 0 # if we get here, no consecutive mismatch
+
+      clear()
+      for k in range(len(allKeys)):
+        sensors[allKeys[k]].append(float(vals[k]))
+      for k in sensors:
+        print(k + ": " + str(float(vals[allKeys.index(k)])))
+      print('saving to: ' + dataPath)
+      print('len of TPS: ' + str(len(sensors['TPS'])))
+      print('ctrl-c to save and exit')
+    except KeyboardInterrupt:
+      with open(dataPath, 'wb') as df:
         pickle.dump(sensors, df) # save file
-        exit()
-    
-    
+      exit()
+  
+  
 # end main
 
 def leave():
