@@ -9,7 +9,7 @@ clear = lambda: os.system('cls')
 
 config = 'config.ini'
 
-configContents = "[GEN]\nCOM = 1\nBAUD = 9600\nFILENAMEDATE = n"
+configContents = "[GEN]\nCOM = 1\nBAUD = 9600\nFILENAMEDATE = n\nFOLDER = default"
 
 sensors = {k: [] for k in 
   ['micros',
@@ -29,7 +29,6 @@ sensors = {k: [] for k in
    'STARTING_BOOL',
    'INJECTED']}
 
-global dataFile
 saveOnExit = False
 
 ser = serial.Serial()
@@ -53,7 +52,7 @@ def main():
     leave()
   
   # name dataFiles after date and time or user chosen
-  global dataFile
+  dataPath = Config.gen('FOLDER')
   if Config.gen('FILENAMEDATE')[0] == 'y':
     tm = time.localtime()
     dataFile = f'{tm[7]:03}{tm[3]:02}{tm[4]:02}{tm[5]:02}'
@@ -68,10 +67,9 @@ def main():
          dataFile = input("file to store data: ")
          while dataFile == "":
            dataFile = input("file to store data: ")
-  
+  dataPath = dataPath + '/' +  dataFile
 
   # open serial port
-  global ser
   ser.baudrate = baudrate
   ser.port = com
   ser.timeout = 2
@@ -95,7 +93,7 @@ def main():
   numMismatch = 0
   maxMismatch = 5
 
-  with open(dataFile, 'wb') as df:
+  with open(dataPath, 'wb') as df:
     while True:
       try:
         try:
@@ -123,7 +121,7 @@ def main():
           sensors[list(sensors.keys())[k]].append(float(vals[k]))
         for k in sensors:
           print(k + ": " + str(sensors[k][-1]))
-        print('saving to: ' + dataFile)
+        print('saving to: ' + dataPath)
         print('len of TPS: ' + str(len(sensors['TPS'])))
         print('ctrl-c to save and exit')
       except KeyboardInterrupt:
