@@ -1,17 +1,10 @@
 import glob
 import pickle
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-from matplotlib import style
-
-#style.use('dark_background')
-
-#fig = plt.figure()
-#ax1 = fig.add_subplot(1,1,1)
-#ax1 = fig.add_subplot(1,1,1)
-  
 
 def main():
+
+  # Chose and open file
   files = glob.glob('./winterbreak/*')
   for n, i in zip(range(0, len(files)), files):
     print('%d %s' %(n,i))
@@ -21,6 +14,7 @@ def main():
   with open(files[fileN], 'rb') as df:
     sensors = pickle.load(df)
 
+  # What to display
   plt.figure(1)
   plt.hist2d(sensors['MAP_INDEX'],sensors['RPM_INDEX'])
   plt.colorbar()
@@ -29,7 +23,7 @@ def main():
 
   ms = sensors['micros']
   ipt = sensors['injectorPulseTime']
-
+  
   #for i in range(0,10):
   #  ix = ms.index(max(ms))
   #  del ms[ix]
@@ -42,7 +36,14 @@ def main():
  
   plt.figure(3)
   plt.scatter(range(len(ms)), ms)
+  plt.grid()
   plt.title('Micros vs len(micros)')
+  
+  dms = [b - a for b, a in zip(ms[1:-1], ms[0:-2])]
+  plt.figure(4)
+  plt.scatter(range(len(dms)),dms)
+  plt.grid()
+  plt.title('dMicros vs len(dMicros)')
   plt.show()
 
 if __name__ == "__main__":

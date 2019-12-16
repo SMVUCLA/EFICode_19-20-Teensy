@@ -88,12 +88,19 @@ def main():
   maxMismatch = 5
 
   allKeys = list(sensors.keys())
+  buf = bytearray()
   while True:
     try:
 
       try:
-        line = ser.readline()
-      except:
+        buf = buf + ser.read(max(1, ser.in_waiting))
+        i = buf.find(b'\n')
+        if i >= 0:
+            line = buf[:i+1]
+            buf = buf[i+1:]
+        else:
+            continue
+      except Exception as e:
         clear()
         print('error')
         continue
@@ -113,15 +120,16 @@ def main():
         else:
           continue;
       numMismatch = 0 # if we get here, no consecutive mismatch
-
       clear()
+      output = ''
       for k in range(len(allKeys)):
         sensors[allKeys[k]].append(float(vals[k]))
       for k in sensors:
-        print(k + ": " + str(float(vals[allKeys.index(k)])))
-      print('saving to: ' + dataPath)
-      print('len of TPS: ' + str(len(sensors['TPS'])))
-      print('ctrl-c to save and exit')
+        output = output + k + ": " + str(float(vals[allKeys.index(k)])) + '\n'
+      output = output + 'saving to: ' + dataPath + '\n'
+      output = output + 'len of TPS: ' + str(len(sensors['TPS'])) + '\n'
+      output = output + 'ctrl-c to save and exit'
+      print(output)
     except KeyboardInterrupt:
       with open(dataPath, 'wb') as df:
         pickle.dump(sensors, df) # save file

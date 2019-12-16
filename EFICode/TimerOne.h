@@ -324,7 +324,7 @@ class TimerOne
 	setPeriod(microseconds);
     }
     void setPeriod(unsigned long microseconds) __attribute__((always_inline)) {
-	const unsigned long cycles = (F_TIMER / 2000000) * microseconds;
+	const unsigned long cycles = (F_TIMER / 1000000) * microseconds;
   // A much faster if-else
   // This is like a binary serch tree and no more than 3 conditions are evaluated.
   // I haven't checked if this becomes significantly longer ASM than the simple ladder.
