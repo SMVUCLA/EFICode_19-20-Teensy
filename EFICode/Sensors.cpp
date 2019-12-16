@@ -46,30 +46,9 @@ double Controller::computeThrottleAdjustment() { // SHOULD THIS INCORPORATE DTPS
   return 1 + TPS * TPS;
 }
 
-//Temperature Measurement
-/*
-// Pre-computes the coefficient values in order to minimize operations
-// during runtime. These pre-computed values are enumerated below. Uses
-// the quadratic formula to calculate the temperature.
-const double tempAlpha = 1.04E-4;     // Coefficient of T^2 term.
-const double tempBeta = -1.01832E-1;  // Coefficient of T^1 term.
-const double tempGamma = 2.18539E1;   // Coefficient of T^0 term.
-
-// Coefficients resulting from combining alpha and beta in an efficient way.
-const double tempA = -tempBeta/(2*tempAlpha);
-const double tempB = 1/(tempAlpha*tempAlpha);
-const double tempC = (tempBeta*tempBeta)/(2*tempAlpha);
-
-// The input voltage to the voltage divider consisting of a 1k resistor and the
-// thermistor in series.
-const double tempInputVal = V_in / voltageConversion;
-const double minTempVal = 0.5 / voltageConversion;
-const double maxTempVal = 4.5 / voltageConversion;
-*/
-
 // Identify the constant for each temperature sensor
-const char IAT_INDEX = 0;
-const char ECT_INDEX = 1;
+const int IAT_INDEX = 0;
+const int ECT_INDEX = 1;
 
 //The following constants are to complete the following eq for temperature
 //
@@ -84,25 +63,8 @@ const double tempConst[2] = {tempBeta[IAT_INDEX]/T_0 - lnR_0[IAT_INDEX], tempBet
 const double R_div[2] = {9300,10000}; // resistance of other resistor in voltage divider
 
 double Controller::getTemp(int pin) {
-/*
-  //return analogRead(pin)*voltageConversion;
-  //Gets temperature reading from specified sensor by using calibration curve
-  //return tempSlope * analogRead(pin) + tempIntercept;
-  int mval = analogRead(pin);
-
-  // Constrain values to this range. Values outside of this range will be useless because
-  // the error in the curve fit becomes extremely large. This constraint also gets rid of
-  // the possibility of having imaginary or infinite results.
-  mval = constrain(mval, minTempVal, maxTempVal);
-
   // TODO: Create log lookup table.
 
-  // Compute temperature from a curve fit to the exponential function with a quadratic
-  // power with respect to the temperature.
-  double x = log((tempInputVal-mval)/(mval));
-  //return tempA - tempB * sqrt(tempC - (tempGamma - x));
-  return ((-tempBeta)-sqrt(pow(tempBeta,2)-4*tempAlpha*(tempGamma-x)))/(2 * tempAlpha);
-*/
   int index; // identify which constants to use
   switch(pin) {
     case IAT_Pin: index = IAT_INDEX;
@@ -111,18 +73,11 @@ double Controller::getTemp(int pin) {
     break;
     default:  index = ECT_INDEX; // just in case
   }
-
   double tempR = R_div[index] / (maxADC/analogRead(pin) - 1); // find resistance of sensor
   return tempBeta[index] / (log(tempR) + tempConst[index]);   // return temperature
-
 }
 
 //MAP Measurement
-
-// ECOTRONS MAP sensor calibration
-// const double MAPSlope = (20000 - 103000) / (0.5 - 4.9); // (y1 - y2) / (x1 - x2) Pascals / Volt
-// const double MAPOffset = ((-4.9 * 20000) + (0.5 * 103000)) / (0.5 - 4.9); // = Pascals
-// const double MAPConversion = MAPSlope * voltageConversion; // Pascals / 1023
 
 // MPX4115A MAP sensor calibration
 const double MAPVs = Vs_5;

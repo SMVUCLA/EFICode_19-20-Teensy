@@ -108,8 +108,12 @@ private:
   long lastRPMCalcTime;
   long injectorPulseTime;
   int delayCount;
+  
+  //Data Retrieval
   bool enableSendingData;
-  bool currentlySendingData;
+  bool currentlySendingData; // used to disable data transmission during injection
+  bool haveInjected; // allows data retrieval to know when injections happened
+
   long int minTimePerSampleReported;
   long lastSerialOutputTime;
   int mapIndex;

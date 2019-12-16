@@ -26,7 +26,8 @@ sensors = {k: [] for k in
    'MAP_INDEX',
    'RPM_INDEX',
    'STARTUP_MOD',
-   'STARTING_BOOL']}
+   'STARTING_BOOL',
+   'INJECTED']}
 
 global dataFile
 saveOnExit = False

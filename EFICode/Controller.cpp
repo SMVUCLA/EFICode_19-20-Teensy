@@ -76,10 +76,11 @@ void Controller::initializeParameters() {
     totalPulseTime = 0;
     lastPulse = 0;
 
-    // True   -> Start with data reporting on.
-    // False  -> Start with data reporting off.
+    // True   -> data reporting on.
+    // False  -> data reporting off.
     enableSendingData = true;
     currentlySendingData = enableSendingData;
+    haveInjected = false;
 
     // If false, doesn't use AFR feedback.
     AFRFeedbackisEnabled = false;
@@ -136,6 +137,7 @@ void Controller::disableINJ() {
 void Controller::pulseOn() {
   // disable data sending
   currentlySendingData = false;
+
   Timer3.setPeriod(injectorPulseTime);
   digitalWrite(INJ_Pin, HIGH);
   Timer3.start();
@@ -152,8 +154,9 @@ void Controller::pulseOff() {
   // Save the amount of time the injector pin spent HIGH.
   totalPulseTime += (micros() - lastPulse);
 
-  // Let data be send again
+  // Let data be sent again
   currentlySendingData = enableSendingData;
+  haveInjected = true;
 }
 
 void Controller::updateRPM() {

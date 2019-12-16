@@ -45,7 +45,7 @@ const double injectorFuelRate   = 2.13333E-3;    //kilograms per second
 const double injectionConstant  = 
               engineDisplacement / (airSpecificGasConstant * injectorFuelRate);
               // meters^2 / (kilograms * microseconds * Kelvin) 
-const int openTime              = 350;          // Estimated amount of time for injector to open in microseconds.
+const int openTime = 350;          // Estimated amount of time for injector to open in microseconds.
 
 // Controls the total number of revolutions 
 const int numRevsForStart = 25;
@@ -78,8 +78,8 @@ const int MIN_TPS = 0;
 const int MAX_TPS = 1;
 
 // Define the BAUD_RATE to communicate with.
-const unsigned long BAUD_RATE = 250000; // In bits per second;
-const int DATA_RATE_PERIOD = 1E5;
+const unsigned long BAUD_RATE = 921600; // In bits per second;
+const int DATA_RATE_PERIOD = 5E4; // send back data every 50 ms
 
 // Engine is considered off if it has RPM less than the minimum RPM.
 const int SHUTOFF_RPM = minRPM;

@@ -8,7 +8,7 @@ void Controller::sendCurrentData() {
 // -whether we are still on startup cycles
 // -engine on? (or just use RPM = 0)
   char toSend [500];
-  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02i:%02i:%01.3f:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+  sprintf(toSend, "%010i:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02i:%02i:%01.3f:%01i:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
   	micros(), 
 	totalRevolutions, 
 	ECT, 
@@ -23,16 +23,18 @@ void Controller::sendCurrentData() {
 	mapIndex, 
 	rpmIndex,
 	startupModifier,
-	startingRevolutions <= numRevsForStart);
+	startingRevolutions <= numRevsForStart,
+	haveInjected);
   Serial.write(toSend);
 }
-
 
 void Controller::trySendingData() {
   if (currentlySendingData) {
       sendCurrentData();
+      haveInjected = false;
     }
   }
+
 // OLD CODE
 /*
   //Sends data on each of our sensors to Serial output
