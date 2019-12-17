@@ -86,6 +86,7 @@ public:
   void AFRFeedback();
   void idleRPMFeedback();
   long interpolate2D(int blrow, int blcol, double x, double y);
+  double doubleMap(double val, double minIn, double maxIn, double minOut, double maxOut);
 
   void setStartupModifier();
   void lowerStartupModifier();
@@ -138,6 +139,10 @@ private:
   double AFR;
   NoiseReduced* AFRVolts;
 
+  //
+  // For some undocumented reason they use this table to account for
+  // Volumetric Efficiency so these values are more like AFR/VE
+  //
   double fuelRatioTable[numTableRows][numTableCols] = 
     {
     {14.5,14.8,15.0,15.3,15.3,15.2,14.6,14.3,13.8,13.6},  // minimum pressure

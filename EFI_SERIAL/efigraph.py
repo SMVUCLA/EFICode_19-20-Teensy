@@ -15,11 +15,11 @@ def main():
     sensors = pickle.load(df)
 
   # What to display
-  plt.figure(1)
-  plt.hist2d(sensors['MAP_INDEX'],sensors['RPM_INDEX'])
-  plt.colorbar()
-  plt.grid()
-  plt.title('RPM_INDEX vs MAP_INDEX')
+  #plt.figure(1)
+  #plt.hist2d(sensors['MAP_INDEX'],sensors['RPM_INDEX'])
+  #plt.colorbar()
+  #plt.grid()
+  #plt.title('RPM_INDEX vs MAP_INDEX')
 
   ms = sensors['micros']
   ipt = sensors['injectorPulseTime']
@@ -31,19 +31,21 @@ def main():
   
   plt.figure(2)
   plt.scatter(ms, ipt)
-  plt.grid()
+  ax2 = plt.twinx()
+  ax2.scatter(ms, sensors['IAT'], color='orange')
+  plt.tight_layout()
   plt.title('Injection Time vs Micros')
  
-  plt.figure(3)
-  plt.scatter(range(len(ms)), ms)
-  plt.grid()
-  plt.title('Micros vs len(micros)')
-  
-  dms = [b - a for b, a in zip(ms[1:-1], ms[0:-2])]
-  plt.figure(4)
-  plt.scatter(range(len(dms)),dms)
-  plt.grid()
-  plt.title('dMicros vs len(dMicros)')
+  #plt.figure(3)
+  #plt.scatter(range(len(ms)), ms)
+  #plt.grid()
+  #plt.title('Micros vs len(micros)')
+  #
+  #dms = [b - a for b, a in zip(ms[1:-1], ms[0:-2])]
+  #plt.figure(4)
+  #plt.scatter(range(len(dms)),dms)
+  #plt.grid()
+  #plt.title('dMicros vs len(dMicros)')
   plt.show()
 
 if __name__ == "__main__":

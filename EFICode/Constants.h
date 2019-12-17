@@ -40,12 +40,12 @@ const double adcToOpampVin = adcRef / (maxADC * opampVoltageDivider);
 
 // Constants for calculating estimated injection times.
 const double engineDisplacement = 49.4E-6;    //meters^3
-const double airSpecificGasConstant = 286.9;   //Joules / (kilograms * Kelvin)
+const double airSpecificGasConstant = 286.9;   //Joules / (kilograms * Kelvin) (from Ideal Gas / Molecular Mass of Air
 const double injectorFuelRate   = 2.13333E-3;    //kilograms per second
 const double injectionConstant  = 
               engineDisplacement / (airSpecificGasConstant * injectorFuelRate);
               // meters^2 / (kilograms * microseconds * Kelvin) 
-const int openTime = 350;          // Estimated amount of time for injector to open in microseconds.
+const int openTime = 1000;          // Estimated amount of time for injector to open in microseconds.
 
 // Controls the total number of revolutions 
 const int numRevsForStart = 25;
@@ -79,7 +79,7 @@ const int MAX_TPS = 1;
 
 // Define the BAUD_RATE to communicate with.
 const unsigned long BAUD_RATE = 921600; // In bits per second;
-const int DATA_RATE_PERIOD = 5E3; // send back data every 50 ms
+const int DATA_RATE_PERIOD = 5000; // send back data every 5 ms
 
 // Engine is considered off if it has RPM less than the minimum RPM.
 const int SHUTOFF_RPM = minRPM;

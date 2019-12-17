@@ -189,10 +189,14 @@ long Controller::interpolate2D(int blrow, int blcol, double x, double y) {
     injectorBasePulseTimes[blrow+1][blcol+1]*(y)*(x);
   }
 
+double Controller::doubleMap(double val, double minIn, double maxIn, double minOut, double maxOut) {
+    return ((val - minIn) / (maxIn - minIn)) * (maxOut - minOut) + minOut;
+  }
+
 void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION******
     // Map the MAP and RPM readings to the scale of 
-    double scaledMAP = map(MAPAvg->getData(), minMAP, maxMAP, 0, maxTableRowIndex); //number from 0 - numTableRows-1
-    double scaledRPM = map(RPM, minRPM, maxRPM, 0, maxTableColIndex); //number from 0 - numTableCols-1
+    double scaledMAP = doubleMap(MAPAvg->getData(), minMAP, maxMAP, 0, maxTableRowIndex); //number from 0 - numTableRows-1
+    double scaledRPM = doubleMap(RPM, minRPM, maxRPM, 0, maxTableColIndex); //number from 0 - numTableCols-1
 
     // Clip out of bounds to the min or max value, whichever is closer.
     scaledMAP = constrain(scaledMAP, 0, maxTableRowIndex);
@@ -207,21 +211,24 @@ void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION*****
     long tempPulseTime;
     if (rpmIndex < maxTableColIndex && mapIndex < maxTableRowIndex) {
         // Interpolation case
-        tempPulseTime = openTime + interpolate2D(mapIndex, rpmIndex, scaledMAP-mapIndex, scaledRPM-rpmIndex) / IAT;
+        tempPulseTime = interpolate2D(mapIndex, rpmIndex, scaledMAP-mapIndex, scaledRPM-rpmIndex) / IAT;
     }
     else {
         // Clipped case
-        tempPulseTime = openTime + injectorBasePulseTimes[mapIndex][rpmIndex] / IAT;
+        tempPulseTime = injectorBasePulseTimes[mapIndex][rpmIndex] / IAT;
     }
+
+    // HOW NECESSARY IS THIS???????
     // Add extra fuel for starting
     if (startingRevolutions <= numRevsForStart)
     {
-        tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
+        //tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
     }
+
     throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2 (THIS IS LIKELY A BUGGY FUNCTION)
-    tempPulseTime *= throttleAdjustment;
+    //tempPulseTime *= throttleAdjustment; // USE THIS AFTER IDLE IS REACHED
     noInterrupts();
-    injectorPulseTime = tempPulseTime * constModifier;
+    injectorPulseTime = openTime + tempPulseTime * constModifier; // ADJUST OPEN TIME
     interrupts();
 }
 
