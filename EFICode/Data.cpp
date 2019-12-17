@@ -8,7 +8,7 @@ void Controller::sendCurrentData() {
 // -whether we are still on startup cycles
 // -engine on? (or just use RPM = 0)
   char toSend [500];
-  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02i:%02i:%01.3f:%01i:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02.2f:%02.2f:%01.3f:%01i:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
   	micros(), 
 	totalRevolutions, 
 	ECT, 
@@ -20,8 +20,8 @@ void Controller::sendCurrentData() {
 	RPM, 
   injectorPulseTime,
 	lastPulse,
-	mapIndex, 
-	rpmIndex,
+	scaledMAP, 
+	scaledRPM,
 	startupModifier,
 	startingRevolutions <= numRevsForStart,
 	haveInjected);

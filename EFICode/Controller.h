@@ -117,6 +117,8 @@ private:
 
   long int minTimePerSampleReported;
   long lastSerialOutputTime;
+  double scaledMAP;
+  double scaledRPM;
   int mapIndex;
   int rpmIndex;
   long prevDeltaRPM;
@@ -146,10 +148,8 @@ private:
   const unsigned long minMAP = 20000;      // In Pa
 
   // Define the number of rows and number of columns for the AFR Table.
-  const int numTableRows = 11;
-  const int maxTableRowIndex = numTableRows - 1;
-  const int numTableCols = 10;
-  const int maxTableColIndex = numTableCols - 1;
+  static const int numTableRows = 11;
+  static const int numTableCols = 10;
 
   //
   // For some undocumented reason they use this table to account for

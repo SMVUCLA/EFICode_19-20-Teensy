@@ -53,18 +53,6 @@ const int numRevsForStart = 25;
 // Number of magnets the hall effect sensor must detect for one full revolution
 const int numMagnets = 2;
 
-// Define the range of values for RPM and Manifold Air Pressure
-const int maxRPM = 8000;    // In revolutions / minute
-const int minRPM = 120;     // In revolutions / minute
-const unsigned long maxMAP = 120000;     // In Pa
-const unsigned long minMAP = 20000;      // In Pa
-
-// Define the number of rows and number of columns for the AFR Table.
-const int numTableRows = 11;
-const int maxTableRowIndex = numTableRows - 1;
-const int numTableCols = 16;
-const int maxTableColIndex = numTableCols - 1;
-
 // Define the range of values that an AFR table value can take.
 const int MIN_AFR = 8;
 const int MAX_AFR = 18;
@@ -82,7 +70,7 @@ const unsigned long BAUD_RATE = 921600; // In bits per second;
 const int DATA_RATE_PERIOD = 5000; // send back data every 5 ms
 
 // Engine is considered off if it has RPM less than the minimum RPM.
-const int SHUTOFF_RPM = minRPM;
+const int SHUTOFF_RPM = 120;
 
 // Minimum time that must pass per revolution before the engine can be considered off.
 // Given in microseconds.

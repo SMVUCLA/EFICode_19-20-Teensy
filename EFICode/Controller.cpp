@@ -195,21 +195,25 @@ double Controller::doubleMap(double val, double minIn, double maxIn, double minO
 
 void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION******
     // Map the MAP and RPM readings to the scale of 
-    double scaledMAP = doubleMap(MAPAvg->getData(), minMAP, maxMAP, 0, maxTableRowIndex); //number from 0 - numTableRows-1
-    double scaledRPM = doubleMap(RPM, minRPM, maxRPM, 0, maxTableColIndex); //number from 0 - numTableCols-1
+    noInterrupts();
 
+    scaledMAP = doubleMap(MAPAvg->getData(), minMAP, maxMAP, 0, numTableRows - 1); //number from 0 - numTableRows-1
+    scaledRPM = doubleMap(RPM, minRPM, maxRPM, 0, numTableCols - 1); //number from 0 - numTableCols-1
+    
     // Clip out of bounds to the min or max value, whichever is closer.
-    scaledMAP = constrain(scaledMAP, 0, maxTableRowIndex);
-    scaledRPM = constrain(scaledRPM, 0, maxTableColIndex);
+    scaledMAP = constrain(scaledMAP, 0, numTableRows - 1);
+    scaledRPM = constrain(scaledRPM, 0, numTableCols - 1);
 
     // Get lower bounds for load and rpm indicies.
     mapIndex = scaledMAP; // double to int
     rpmIndex = scaledRPM;
 
+    interrupts();
+
     // Clip extrapolation to the value at the max index. Otherwise, perform 2D interpolation to get
     // the base pulse time and then divide by the temperature.
     long tempPulseTime;
-    if (rpmIndex < maxTableColIndex && mapIndex < maxTableRowIndex) {
+    if (rpmIndex < numTableCols - 1 && mapIndex < numTableRows - 1) {
         // Interpolation case
         tempPulseTime = interpolate2D(mapIndex, rpmIndex, scaledMAP-mapIndex, scaledRPM-rpmIndex) / IAT;
     }
