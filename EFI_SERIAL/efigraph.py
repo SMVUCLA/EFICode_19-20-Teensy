@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def main():
 
-  # Chose and open file
+  # Choose and open file
   files = glob.glob('./winterbreak/*')
   for n, i in zip(range(0, len(files)), files):
     print('%d %s' %(n,i))

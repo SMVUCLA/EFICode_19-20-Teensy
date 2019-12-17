@@ -4,6 +4,8 @@ from config_loader import Config
 import time
 import atexit
 import pickle
+from curses import wrapper
+from curses import ascii as crsascii
 
 clear = lambda: os.system('cls')
 
@@ -31,7 +33,7 @@ sensors = {k: [] for k in
 
 ser = serial.Serial()
 
-def main():
+def main(stdscr):
 
   # if config.ini exists, contine
   #  else create it and exit
@@ -65,76 +67,89 @@ def main():
          dataFile = input("file to store data: ")
          while dataFile == "":
            dataFile = input("file to store data: ")
+
   dataPath = dataPath + '/' +  dataFile
 
+  # from here on we want a nicer output
+  stdscr.clear()
   # open serial port
   ser.baudrate = baudrate
   ser.port = com
   ser.timeout = 2
-  print('opening port: ' + com + ' at ' + str(baudrate))
   cnt = 0;
   while not ser.is_open:
     try:
       ser.open()
     except:
-      print('opening port: ' + com + ' at ' + str(baudrate) + " try: " + str(cnt))
+      stdscr.clear()
+      stdscr.addstr(0, 0, 'opening port: ' + com + ' at ' + str(baudrate) + " try: " + str(cnt))
+      stdscr.refresh()
       cnt += 1
-      clear()
 
   # collect and log data
-  global sensors
-  
   numMismatch = 0
   maxMismatch = 5
 
   allKeys = list(sensors.keys())
   buf = bytearray()
+  stdscr.nodelay(1) # make getch() non-blocking
   while True:
+    # rewrite of ser.readline()
+    #   used since readline() is slow
     try:
-
-      try:
-        buf = buf + ser.read(max(1, ser.in_waiting))
-        i = buf.find(b'\n')
-        if i >= 0:
-            line = buf[:i+1]
-            buf = buf[i+1:]
-        else:
-            continue
-      except Exception as e:
-        clear()
-        print('error')
-        continue
-
-      if line == '':
-        print('empty buffer')
-        continue
-
-      vals = line.split(b':')
-      if len(vals) != len(allKeys):
-        numMismatch += 1
-        if numMismatch >= maxMismatch:
-          numMismatch = 0
-          print('mismatch in sensor number')
-          input('press enter to continue')
+      buf = buf + ser.read(max(1, ser.in_waiting))
+      i = buf.find(b'\n')
+      if i >= 0:
+          line = buf[:i+1]
+          buf = buf[i+1:]
+      else:
           continue
-        else:
-          continue;
-      numMismatch = 0 # if we get here, no consecutive mismatch
-      clear()
-      output = ''
-      for k in range(len(allKeys)):
-        sensors[allKeys[k]].append(float(vals[k]))
-      for k in sensors:
-        output = output + k + ": " + str(float(vals[allKeys.index(k)])) + '\n'
-      output = output + 'saving to: ' + dataPath + '\n'
-      output = output + 'len of TPS: ' + str(len(sensors['TPS'])) + '\n'
-      output = output + 'ctrl-c to save and exit'
-      print(output)
-    except KeyboardInterrupt:
-      with open(dataPath, 'wb') as df:
-        pickle.dump(sensors, df) # save file
-      exit()
-  
+    except Exception as e:
+      stdscr.clear()
+      stdscr.addstr(0, 0, 'error')
+      stdscr.refresh()
+      continue
+
+    if line == '':
+      stdscr.clear()
+      stdscr.addstr(0, 0, 'empty buffer')
+      stdscr.refresh()
+      continue
+
+    vals = line.split(b':')
+    if len(vals) != len(allKeys):
+      numMismatch += 1
+      if numMismatch >= maxMismatch:
+        numMismatch = 0
+        stdscr.clear()
+        stdscr.addstr(0, 0, 'mismatch in sensor number')
+        stdscr.addstr(1, 0, 'press enter to continue')
+        stdscr.refresh()
+        stdscr.nodelay(0)
+        stdscr.getkey()
+        stdscr.nodelay(1)
+        continue
+      else:
+        continue;
+
+    numMismatch = 0 # if we get here, no consecutive mismatch
+    output = ''
+    for k in range(len(allKeys)):
+      sensors[allKeys[k]].append(float(vals[k]))
+    for k in sensors:
+      output = output + k + ": " + str(float(vals[allKeys.index(k)])) + '\n'
+    output = output + 'saving to: ' + dataPath + '\n'
+    output = output + 'len of TPS: ' + str(len(sensors['TPS'])) + '\n'
+    output = output + 'shift-s to save and exit'
+    stdscr.clear()
+    stdscr.addstr(output)
+    stdscr.refresh()
+
+    if stdscr.getch() == ord('S'):
+      break
+
+  with open(dataPath, 'wb') as df:
+    pickle.dump(sensors, df) # save file
   
 # end main
 
@@ -142,5 +157,6 @@ def leave():
   input("press enter to exit")
   exit()
 
-if __name__ == '__main__':
-  main()
+wrapper(main)
+#if __name__ == '__main__':
+#  main()
