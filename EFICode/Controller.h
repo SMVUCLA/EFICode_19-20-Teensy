@@ -138,6 +138,18 @@ private:
   NoiseReduced* MAPAvg;
   double AFR;
   NoiseReduced* AFRVolts;
+  
+  // Define the range of values for RPM and Manifold Air Pressure
+  const int maxRPM = 8000;    // In revolutions / minute
+  const int minRPM = 120;     // In revolutions / minute
+  const unsigned long maxMAP = 120000;     // In Pa
+  const unsigned long minMAP = 20000;      // In Pa
+
+  // Define the number of rows and number of columns for the AFR Table.
+  const int numTableRows = 11;
+  const int maxTableRowIndex = numTableRows - 1;
+  const int numTableCols = 10;
+  const int maxTableColIndex = numTableCols - 1;
 
   //
   // For some undocumented reason they use this table to account for
