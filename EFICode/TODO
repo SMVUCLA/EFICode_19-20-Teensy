@@ -9,9 +9,10 @@ Winter Break TODOs
  -sometimes trips many times
   -set a max update rate for totalRevolutions
 
--micros() overflow
- -create updateMicros() and getMicros() functions
-   -handle overflows here
+-micros() overflow XXXXXXX
+ -handle case by case
+
+-why isn't TPS working
 
    ------------------------------------------------
 TODO:

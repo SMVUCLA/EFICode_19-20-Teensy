@@ -101,7 +101,7 @@ void Controller::initializeParameters() {
 
 void Controller::countRevolution() {
   magnetsHit++;
-  if (magnetsHit >= numMagnets - 1) {
+  if (magnetsHit > numMagnets) {
       // Enable the injector if it is disabled.
       if (INJisDisabled) {
         enableINJ();
@@ -167,7 +167,8 @@ void Controller::updateRPM() {
   if (tempRev > revsPerCalc) { 
     noInterrupts(); //To ensure that the interrupt of countRev doesn't get lost in case of bad timing of threads
     unsigned long currentRPMCalcTime = micros();
-    RPM = getRPM(currentRPMCalcTime - lastRPMCalcTime, tempRev); //Uses the previously determined value of revolutions to reduce
+    if(currentRPMCalcTime - lastRPMCalcTime > 0) // only write if this value is positive (protect from overflow)
+    	RPM = getRPM(currentRPMCalcTime - lastRPMCalcTime, tempRev); //Uses the previously determined value of revolutions to reduce
     //amount of noInterrupts() calls
     lastRPMCalcTime = currentRPMCalcTime;
     revolutions = 0; //Race Conditions Modification Problem
@@ -335,19 +336,19 @@ void Controller::setStartupModifier() {
 }
 
 bool Controller::detectEngineOff() {
-  if (micros() - lastRPMCalcTime >= SHUTOFF_DELAY)
-  {
+  // if micros() overflows, we can tolerate defaulting to on state (will just inject less)
+  //   it will be worse if the engine goes off when it is actually on which means we'll inject more
+  //   (as if in starting state)
+  if (micros() - lastRPMCalcTime > SHUTOFF_DELAY) {
     return true;
   }
   return false;
 }
 
-void Controller::lowerStartupModifier()
-{
+void Controller::lowerStartupModifier() {
   startupModifier -= 0.05;
 }
 
-void Controller::raiseStartupModifier()
-{
+void Controller::raiseStartupModifier() {
   startupModifier += 0.05;
 }

@@ -34,7 +34,8 @@ double Controller::getTPS() {
     newTPS = 0;
   if(newTPS > 1)
     newTPS = 1;
-  DTPS = (newTPS - TPS) / (currThrottleMeasurementTime - lastThrottleMeasurementTime);
+  if(currThrottleMeasurementTime - lastThrottleMeasurementTime > 0)
+    DTPS = (newTPS - TPS) / (currThrottleMeasurementTime - lastThrottleMeasurementTime);
   lastThrottleMeasurementTime = currThrottleMeasurementTime;
   return newTPS;
 }
