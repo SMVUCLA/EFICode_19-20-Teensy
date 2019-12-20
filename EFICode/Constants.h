@@ -41,7 +41,7 @@ const double adcToOpampVin = adcRef / (maxADC * opampVoltageDivider);
 // Constants for calculating estimated injection times.
 const double engineDisplacement = 49.4E-6;    //meters^3
 const double airSpecificGasConstant = 286.9;   //Joules / (kilograms * Kelvin) (from Ideal Gas / Molecular Mass of Air
-const double injectorFuelRate   = 2.13333E-3;    //kilograms per second
+const double injectorFuelRate   = 10E-3;    //kilograms per second
 const double injectionConstant  = 
               engineDisplacement / (airSpecificGasConstant * injectorFuelRate);
               // meters^2 / (kilograms * microseconds * Kelvin) 
@@ -75,6 +75,6 @@ const int SHUTOFF_RPM = 120;
 // Minimum time that must pass per revolution before the engine can be considered off.
 // Given in microseconds.
 // (60 sec / min) * (10^6 microsecond / sec) * (SHUTOFF_RPM min / revolution) = (SHUTOFF_DELAY microseconds / revolution)
-const unsigned long int SHUTOFF_DELAY = 6E7 / SHUTOFF_RPM ; 
+const unsigned long int SHUTOFF_DELAY = 1E6; //making it 1second
 
 #endif

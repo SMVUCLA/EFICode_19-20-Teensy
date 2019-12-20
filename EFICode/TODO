@@ -1,3 +1,19 @@
+Winter Break TODOs
+
+-injection timing
+ -ensure injections happen during correct cycle
+  -use MAP to find when to inject rather then totalRevolutions % 2
+   -this can be done by injecting only when a local min in MAP happened more recently than a local max
+
+-hall effect sensor
+ -sometimes trips many times
+  -set a max update rate for totalRevolutions
+
+-micros() overflow
+ -create updateMicros() and getMicros() functions
+   -handle overflows here
+
+   ------------------------------------------------
 TODO:
 -change constants
  -pin values

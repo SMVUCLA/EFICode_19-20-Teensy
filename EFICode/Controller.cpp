@@ -164,12 +164,12 @@ void Controller::updateRPM() {
   int tempRev = revolutions; //Prevents revolutions being read while it is being modified by the 
   //countRevolution() function associated with the interrupt
   interrupts();
-  if (tempRev >= revsPerCalc) { 
+  if (tempRev > revsPerCalc) { 
+    noInterrupts(); //To ensure that the interrupt of countRev doesn't get lost in case of bad timing of threads
     unsigned long currentRPMCalcTime = micros();
     RPM = getRPM(currentRPMCalcTime - lastRPMCalcTime, tempRev); //Uses the previously determined value of revolutions to reduce
     //amount of noInterrupts() calls
     lastRPMCalcTime = currentRPMCalcTime;
-    noInterrupts(); //To ensure that the interrupt of countRev doesn't get lost in case of bad timing of threads
     revolutions = 0; //Race Conditions Modification Problem
     interrupts();
     
@@ -226,7 +226,7 @@ void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION*****
     // Add extra fuel for starting
     if (startingRevolutions <= numRevsForStart)
     {
-        //tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
+        tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
     }
 
     throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2 (THIS IS LIKELY A BUGGY FUNCTION)
