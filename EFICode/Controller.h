@@ -61,6 +61,8 @@ public:
   // check, changes parameters accordingly.
   void checkEngineState();
 
+  bool inStartingRevs();
+
   // Turns the injector on if it is not disabled.
   void pulseOn();
 
@@ -103,6 +105,7 @@ private:
   int revolutions;
   unsigned long totalRevolutions;
   unsigned long startingRevolutions;
+  unsigned long previousRev;
   
   unsigned long totalPulseTime;
   unsigned long lastPulse;
@@ -137,20 +140,16 @@ private:
   double ECT;
   double IAT;
   double MAP;
+  double prevdMAP;
+  double prevMAP;
+  unsigned long updateddMAP;
+  unsigned long MAPPeak; // time of previous peak
+  unsigned long MAPTrough; // time of previous trough
+  const unsigned long minMAPdt = 1000; // in microseconds
   NoiseReduced* MAPAvg;
   double AFR;
   NoiseReduced* AFRVolts;
   
-  // Define the range of values for RPM and Manifold Air Pressure
-  const int maxRPM = 8000;    // In revolutions / minute
-  const int minRPM = 120;     // In revolutions / minute
-  const unsigned long maxMAP = 120000;     // In Pa
-  const unsigned long minMAP = 20000;      // In Pa
-
-  // Define the number of rows and number of columns for the AFR Table.
-  static const int numTableRows = 11;
-  static const int numTableCols = 10;
-
   //
   // For some undocumented reason they use this table to account for
   // Volumetric Efficiency so these values are more like AFR/VE

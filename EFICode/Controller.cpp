@@ -32,9 +32,23 @@ bool Controller::readSensors() {
     TPS = getTPS();
     ECT = getTemp(ECT_Pin);
     IAT = getTemp(IAT_Pin);
+    setStartupModifier();
+
     MAP = getMAP();
     MAPAvg->addData(MAP);
-    setStartupModifier();
+    // Update  MAPPeak and MAPTrough
+    if(updateddMAP - micros() > minMAPdt) {
+        double dMAP = MAP - prevMAP;
+        if((prevdMAP < 0) != (dMAP < 0)) // if slopes have different sign
+           if(dMAP < 0)
+              MAPPeak = micros();
+           else
+              MAPTrough = micros();
+        prevdMAP = dMAP;
+	prevMAP = MAP;
+	updateddMAP = micros();
+    }
+
     return true;
 }
 
@@ -62,6 +76,12 @@ void Controller::initializeParameters() {
 
     // Initialize MAP averaging
     MAPAvg = new NoiseReduced(100);
+    MAP = 0;
+    prevdMAP = 0;
+    prevMAP = 0;
+    MAPPeak = 0;
+    MAPTrough = 0;
+    updateddMAP = 0;
     
     // Initialize MAP and RPM indicies to zero.
     mapIndex = 0;
@@ -100,6 +120,11 @@ void Controller::initializeParameters() {
 }
 
 void Controller::countRevolution() {
+  //  When called too soon, we skip countRevolution
+  //  When micros() overflows, we continue as if its a normal countRevolution
+  if (micros() - prevRevolution > 0 && micros() - prevRevolution < minDelayPerRev)
+    return;
+  prevRevolution = micros();
   magnetsHit++;
   if (magnetsHit > numMagnets) {
       // Enable the injector if it is disabled.
@@ -114,8 +139,12 @@ void Controller::countRevolution() {
       //Lock guards seem unneccessary
       
       //Inject on every second revolution because this is a 4 stroke engine
-      if (totalRevolutions % 2 == 1) {
-        pulseOn();
+      if (inStartingRevs()) { // injected every other (sort of aribitrarily)
+          if (totalRevolutions % 2 == 1)
+              pulseOn();
+      } else {  // inject when the time since the last trough is < 1/2 * period
+	  if (((60 * 1E6)/RPM)/2 > micros() - MAPTrough)
+              pulseOn();
       }
       magnetsHit = 0;
   }
@@ -225,7 +254,7 @@ void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION*****
 
     // HOW NECESSARY IS THIS???????
     // Add extra fuel for starting
-    if (startingRevolutions <= numRevsForStart)
+    if (inStartingRevs())
     {
         tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
     }
@@ -327,6 +356,10 @@ void Controller::checkEngineState() {
       disableINJ();
     }
   }
+}
+
+bool Controller::inStartingRevs() {
+   return startingRevolutions <= numRevsForStart;
 }
 
 const double startupModifierSlope = -0.0147;

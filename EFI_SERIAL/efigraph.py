@@ -1,6 +1,7 @@
 import glob
 import pickle
 import matplotlib.pyplot as plt
+import numpy as np
 
 def main():
 
@@ -32,32 +33,36 @@ def main():
   tps = list(sensors['TPS'])
   revs = list(sensors['totalRevs'])
   drevs = [b - a for b, a in zip(revs[1:-1], revs[0:-2])]
-  drevs = [0, 0] + drevs[:]
+  drevs = [0] + drevs[:] + [0]
   print(len(drevs))
   print(len(ms))
-
-  for i in range(0,500):
-    rpm[rpm.index(max(rpm))] = 0
   
+  for i in range(len(rpm)):
+    if(rpm[i] > 8000):
+      rpm[i] = rpm[i - 1] # code basically implements this now
+
   #
   # Injection Time vs Micros
   #
   plt.figure(2)
   plt.plot(ms, mp)
   ax2 = plt.twinx()
-  ax2.scatter(ms, sensors['INJECTED'], color='orange')
-  ax2.scatter(ms, drevs, color='green')
+  ax2.scatter(ms, drevs, color='green', label='dRevs')
+  ax2.scatter(ms, sensors['INJECTED'], color='orange', label='Injected')
   for i in range(len(drevs)):
     if drevs[i] > 0:
       ax2.axvline(x=ms[i])
   plt.tight_layout()
+  plt.legend(loc='upper left')
   plt.title('MAP vs Micros')
 
-
-  plt.figure(4)
-  plt.plot(sensors['micros'],sensors['MAP_AVG'])
-  plt.grid()
-  plt.title('dMicros vs len(dMicros)')
+  plt.figure(3)
+  plt.plot(ms, mp)
+  ax2 = plt.twinx()
+  ax2.plot(ms, rpm, color='green', label='RPM')
+  plt.tight_layout()
+  plt.legend(loc='upper left')
+  plt.title('MAP vs Micros')
   
   #
   # dMicros

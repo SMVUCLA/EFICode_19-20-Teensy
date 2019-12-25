@@ -2,13 +2,13 @@
 #include "Arduino.h"
 #include "Constants.h"
 
-void Controller::sendCurrentData() {
+void Controller::sendCurrentData() { // THIS MUST TAKE LESS THAN 1 ms (to guaruntee micros doesn't miss an overflow)
 // TODO:
 // -last row and column used in tables ( maybe send back actual values used)
 // -whether we are still on startup cycles
 // -engine on? (or just use RPM = 0)
   char toSend [500];
-  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02.2f:%02.2f:%01.3f:%01i:%01i\n", // 57 numbers + 8 :'s + 6 .'s + 1 \n = 72 bytes
+  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02.2f:%02.2f:%01.3f:%01i:%01i\n", // about 97 bytes? (800-900 us)
   	micros(), 
 	totalRevolutions, 
 	ECT, 

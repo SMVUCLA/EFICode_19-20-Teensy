@@ -69,6 +69,19 @@ const int MAX_TPS = 1;
 const unsigned long BAUD_RATE = 921600; // In bits per second;
 const int DATA_RATE_PERIOD = 5000; // send back data every 5 ms
 
+// Define the range of values for RPM and Manifold Air Pressure
+const int maxRPM = 8000;    // In revolutions / minute
+const int minRPM = 120;     // In revolutions / minute
+const unsigned long maxMAP = 120000;     // In Pa
+const unsigned long minMAP = 20000;      // In Pa
+
+const unsigned long minDelayPerRev = 1 / (maxRPM * (1/60) * (1/1E6)); // in units of microseconds
+
+// Define the number of rows and number of columns for the AFR Table.
+static const int numTableRows = 11;
+static const int numTableCols = 10;
+
+
 // Engine is considered off if it has RPM less than the minimum RPM.
 const int SHUTOFF_RPM = 120;
 

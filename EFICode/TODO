@@ -1,11 +1,11 @@
 Winter Break TODOs
 
--injection timing
+-injection timing XXX (Test!!)
  -ensure injections happen during correct cycle
   -use MAP to find when to inject rather then totalRevolutions % 2
    -this can be done by injecting only when a local min in MAP happened more recently than a local max
 
--hall effect sensor
+-hall effect sensor  XXXXX
  -sometimes trips many times
   -set a max update rate for totalRevolutions
 
