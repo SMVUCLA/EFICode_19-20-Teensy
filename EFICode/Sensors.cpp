@@ -5,7 +5,7 @@
 
 // timepassed is in microseconds
 long Controller::getRPM (long int timePassed, int rev) {
-  return (60000000.0 * rev) / (timePassed);
+  return (60 * 1E6 * rev) / (timePassed);
 }
 
 //TPS Measurement

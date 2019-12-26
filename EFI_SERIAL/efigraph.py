@@ -2,6 +2,7 @@ import glob
 import pickle
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 
 def main():
 
@@ -63,6 +64,12 @@ def main():
   plt.tight_layout()
   plt.legend(loc='upper left')
   plt.title('MAP vs Micros')
+
+  plt.figure(4)
+  plt.plot(ms, mp)
+  ax2 = plt.twinx()
+  ax2.plot(ms, list(np.convolve(sensors['IAT'], [1/math.sqrt(2 * math.pi), 1/math.sqrt(2 * math.exp(1) * math.pi), 1/math.sqrt(2 * math.exp(4) * math.pi)], 'same')), color='green')
+  plt.title('MAP/IAT vs ms')
   
   #
   # dMicros

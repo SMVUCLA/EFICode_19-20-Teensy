@@ -142,8 +142,8 @@ void Controller::countRevolution() {
       if (inStartingRevs()) { // injected every other (sort of aribitrarily)
           if (totalRevolutions % 2 == 1)
               pulseOn();
-      } else {  // inject when the time since the last trough is < 1/2 * period
-	  if (((60 * 1E6)/RPM)/2 > micros() - MAPTrough)
+      } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
+	  if ((60 * 1E6) / RPM > micros() - MAPTrough)
               pulseOn();
       }
       magnetsHit = 0;
@@ -193,7 +193,7 @@ void Controller::updateRPM() {
   int tempRev = revolutions; //Prevents revolutions being read while it is being modified by the 
   //countRevolution() function associated with the interrupt
   interrupts();
-  if (tempRev > revsPerCalc) { 
+  if (tempRev >= revsPerCalc) { 
     noInterrupts(); //To ensure that the interrupt of countRev doesn't get lost in case of bad timing of threads
     unsigned long currentRPMCalcTime = micros();
     if(currentRPMCalcTime - lastRPMCalcTime > 0) // only write if this value is positive (protect from overflow)
@@ -345,13 +345,10 @@ void Controller::calculateBasePulseTime(bool singleVal, int row, int col) {
 
 void Controller::checkEngineState() {
   if (detectEngineOff()) {
-    if (revsPerCalc > 0)
-    {   //comment out revolutions and RPM when testing without the engine on
-        revolutions = 0;
-        startingRevolutions = 0;
-        RPM = 0;
-        lastRPMCalcTime = micros();
-    }
+    revolutions = 0;
+    startingRevolutions = 0;
+    RPM = 0;
+    lastRPMCalcTime = micros();
     if (!INJisDisabled) {
       disableINJ();
     }
