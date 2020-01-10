@@ -66,6 +66,7 @@ void Controller::initializeParameters() {
     // Number of revolutions that must pass before recalculating RPM.
     revsPerCalc = 5;
     constModifier = 1.0;
+    previousRev = micros();
     
     // Initialize AFR values.
     AFR = 0;
@@ -122,9 +123,9 @@ void Controller::initializeParameters() {
 void Controller::countRevolution() {
   //  When called too soon, we skip countRevolution
   //  When micros() overflows, we continue as if its a normal countRevolution
-  if (micros() - prevRevolution > 0 && micros() - prevRevolution < minDelayPerRev)
+  if (micros() - previousRev > 0 && micros() - previousRev < minDelayPerRev)
     return;
-  prevRevolution = micros();
+  previousRev = micros();
   magnetsHit++;
   if (magnetsHit > numMagnets) {
       // Enable the injector if it is disabled.
