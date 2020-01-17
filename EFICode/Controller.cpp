@@ -140,11 +140,11 @@ void Controller::countRevolution() {
       //Lock guards seem unneccessary
       
       //Inject on every second revolution because this is a 4 stroke engine
-      if (inStartingRevs()) { // injected every other (sort of aribitrarily)
+      if (inStartingRevs() && !detectEngineOff()) { // injected every other (sort of aribitrarily)
           if (totalRevolutions % 2 == 1)
               pulseOn();
       } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
-	  if ((60 * 1E6) / RPM > micros() - MAPTrough)
+	  if (((60 * 1E6) / RPM > micros() - MAPTrough) && !detectEngineOff())
               pulseOn();
       }
       magnetsHit = 0;

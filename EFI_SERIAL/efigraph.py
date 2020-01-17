@@ -50,9 +50,9 @@ def main():
   ax2 = plt.twinx()
   ax2.scatter(ms, drevs, color='green', label='dRevs')
   ax2.scatter(ms, sensors['INJECTED'], color='orange', label='Injected')
-  for i in range(len(drevs)):
-    if drevs[i] > 0:
-      ax2.axvline(x=ms[i])
+  #for i in range(len(drevs)):
+   # if drevs[i] > 0:
+    #  ax2.axvline(x=ms[i])
   plt.tight_layout()
   plt.legend(loc='upper left')
   plt.title('MAP vs Micros')
