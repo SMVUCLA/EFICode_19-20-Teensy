@@ -30,7 +30,9 @@ sensors = {k: [] for k in
    'STARTUP_MOD',
    'STARTING_BOOL',
    'INJECTED',
-   'MAPTrough']}
+   'MAPTrough',
+   'dMAP',
+   'gMAP']}
 
 ser = serial.Serial()
 

@@ -8,7 +8,7 @@ void Controller::sendCurrentData() { // THIS MUST TAKE LESS THAN 1 ms (to guarun
 // -whether we are still on startup cycles
 // -engine on? (or just use RPM = 0)
   char toSend [500];
-  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02.2f:%02.2f:%01.3f:%01i:%01i:%010u\n", // about 97 bytes? (800-900 us)
+  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02.2f:%02.2f:%01.3f:%01i:%01i:%010u:%03.3f:%03.3f\n", // about 97 bytes? (800-900 us)
   	micros(), 
 	totalRevolutions, 
 	ECT, 
@@ -25,7 +25,9 @@ void Controller::sendCurrentData() { // THIS MUST TAKE LESS THAN 1 ms (to guarun
 	startupModifier,
 	startingRevolutions <= numRevsForStart,
 	haveInjected,
-	MAPTrough);
+	MAPTrough,
+  prevdMAP,
+  MAPAvg->getGauss());
   Serial.write(toSend);
 }
 

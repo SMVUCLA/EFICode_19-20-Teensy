@@ -17,18 +17,22 @@
 #ifndef NOISEREDUCE_H
 #define NOISEREDUCE_H
 
+#define SD 6.0 //standard deviations
+
 struct NoiseReduced {
   public:
     NoiseReduced();
     NoiseReduced(int sampleSize);
     int addData(double input);
     double getData();
+	double getGauss();
     
   private:
     int len;
     int filled;
     int head;
     double *data;
+	double *weights;
     double avg;
 };
 

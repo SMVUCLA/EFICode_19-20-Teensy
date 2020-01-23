@@ -51,7 +51,7 @@ const int openTime = 1000;          // Estimated amount of time for injector to 
 const int numRevsForStart = 25;
 
 // Number of magnets the hall effect sensor must detect for one full revolution
-const int numMagnets = 2;
+const int numMagnets = 1;
 
 // Define the range of values that an AFR table value can take.
 const int MIN_AFR = 8;
@@ -76,6 +76,7 @@ const unsigned long maxMAP = 120000;     // In Pa
 const unsigned long minMAP = 20000;      // In Pa
 
 const unsigned long minDelayPerRev = (1 / (maxRPM * (1/60))) * (1E6); // in units of microseconds
+const unsigned int revsPerCalc = 5;
 
 // Define the number of rows and number of columns for the AFR Table.
 static const int numTableRows = 11;
@@ -88,6 +89,6 @@ const int SHUTOFF_RPM = 120;
 // Minimum time that must pass per revolution before the engine can be considered off.
 // Given in microseconds.
 // (60 sec / min) * (10^6 microsecond / sec) * (SHUTOFF_RPM min / revolution) = (SHUTOFF_DELAY microseconds / revolution)
-const unsigned long int SHUTOFF_DELAY = 1E6; //making it 1second
+const unsigned long int SHUTOFF_DELAY = 1E6; // below 60 RPM is shutoff
 
 #endif

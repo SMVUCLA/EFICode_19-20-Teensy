@@ -38,15 +38,16 @@ bool Controller::readSensors() {
     MAPAvg->addData(MAP);
     // Update  MAPPeak and MAPTrough
     if(updateddMAP - micros() > minMAPdt) {
-        double dMAP = MAP - prevMAP;
-        if((prevdMAP < 0) != (dMAP < 0)) // if slopes have different sign
+        double dMAP = MAPAvg->getGauss() - prevMAP;
+        if((prevdMAP < 0) != (dMAP < 0)) { // if slopes have different sign
            if(dMAP < 0)
               MAPPeak = micros();
            else
               MAPTrough = micros();
+		}
         prevdMAP = dMAP;
-	prevMAP = MAP;
-	updateddMAP = micros();
+		prevMAP = MAPAvg->getGauss();
+		updateddMAP = micros();
     }
 
     return true;
@@ -64,7 +65,6 @@ void Controller::initializeParameters() {
 */
 
     // Number of revolutions that must pass before recalculating RPM.
-    revsPerCalc = 5;
     constModifier = 1.0;
     previousRev = micros();
     
@@ -123,11 +123,11 @@ void Controller::initializeParameters() {
 void Controller::countRevolution() {
   //  When called too soon, we skip countRevolution
   //  When micros() overflows, we continue as if its a normal countRevolution
-  if (micros() - previousRev > 0 && micros() - previousRev < minDelayPerRev)
-    return;
+  if (micros() - previousRev > 0 && (micros() - previousRev < minDelayPerRev) && magnetsHit == 0)
+     return;
   previousRev = micros();
   magnetsHit++;
-  if (magnetsHit > numMagnets) {
+  if (magnetsHit >= numMagnets) { // entered Revolution
       // Enable the injector if it is disabled.
       if (INJisDisabled) {
         enableINJ();
@@ -140,17 +140,16 @@ void Controller::countRevolution() {
       //Lock guards seem unneccessary
       
       //Inject on every second revolution because this is a 4 stroke engine
-      if (inStartingRevs() && !detectEngineOff()) { // injected every other (sort of aribitrarily)
+      if (!detectEngineOff() && inStartingRevs()) {
           if (totalRevolutions % 2 == 1)
               pulseOn();
       } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
-	  if (((60 * 1E6) / RPM > micros() - MAPTrough) && !detectEngineOff())
+	  if (!detectEngineOff() && ((60 * 1E6) / RPM > micros() - MAPTrough))
               pulseOn();
       }
       magnetsHit = 0;
   }
 }
-
 
 void Controller::enableINJ() {
   INJisDisabled = false;
@@ -370,7 +369,7 @@ bool Controller::detectEngineOff() {
   // if micros() overflows, we can tolerate defaulting to on state (will just inject less)
   //   it will be worse if the engine goes off when it is actually on which means we'll inject more
   //   (as if in starting state)
-  if (micros() - lastRPMCalcTime > SHUTOFF_DELAY) {
+  if (micros() - previousRev > SHUTOFF_DELAY) {
     return true;
   }
   return false;

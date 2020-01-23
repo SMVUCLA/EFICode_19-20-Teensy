@@ -7,7 +7,7 @@ import math
 def main():
 
   # Choose and open file
-  files = glob.glob('./winterbreak/*')
+  files = glob.glob('./W20/*')
   for n, i in zip(range(0, len(files)), files):
     print('%d %s' %(n,i))
   
@@ -30,9 +30,15 @@ def main():
   ms = list(sensors['micros'])
   ipt = list(sensors['injectorPulseTime'])
   mp = list(sensors['MAP'])
+  mpavg = list(sensors['MAP_AVG'])
   rpm = list(sensors['RPM'])
   tps = list(sensors['TPS'])
   revs = list(sensors['totalRevs'])
+  mpt = list(sensors['MAPTrough'])
+  mptlen = list(np.ones(len(mpt)))
+  dmap = list(sensors['dMAP'])
+  gmap = list(sensors['gMAP'])
+  dmapPos = [a > 0 for a in dmap]
   drevs = [b - a for b, a in zip(revs[1:-1], revs[0:-2])]
   drevs = [0] + drevs[:] + [0]
   print(len(drevs))
@@ -47,12 +53,16 @@ def main():
   #
   plt.figure(2)
   plt.plot(ms, mp)
+  plt.plot(ms, mpavg, color='purple')
+  plt.plot(ms, gmap, color='pink')
+  #plt.plot(ms, np.convolve(mp, [20/28,5/28,2/28,1/28], 'same'), color='purple')
   ax2 = plt.twinx()
   ax2.scatter(ms, drevs, color='green', label='dRevs')
   ax2.scatter(ms, sensors['INJECTED'], color='orange', label='Injected')
-  #for i in range(len(drevs)):
-   # if drevs[i] > 0:
-    #  ax2.axvline(x=ms[i])
+  ax2.scatter(mpt, mptlen, color='red', label='MAP Trough')
+  #ax2.scatter(ms, dmapPos, color='red', label='dMAP is Positive')
+  #for i in range(len(mpt)):
+   # ax2.axvline(x=mpt[i])
   plt.tight_layout()
   plt.legend(loc='upper left')
   plt.title('MAP vs Micros')
@@ -64,12 +74,6 @@ def main():
   plt.tight_layout()
   plt.legend(loc='upper left')
   plt.title('MAP vs Micros')
-
-  plt.figure(4)
-  plt.plot(ms, mp)
-  ax2 = plt.twinx()
-  ax2.plot(ms, list(np.convolve(sensors['IAT'], [1/math.sqrt(2 * math.pi), 1/math.sqrt(2 * math.exp(1) * math.pi), 1/math.sqrt(2 * math.exp(4) * math.pi)], 'same')), color='green')
-  plt.title('MAP/IAT vs ms')
   
   #
   # dMicros

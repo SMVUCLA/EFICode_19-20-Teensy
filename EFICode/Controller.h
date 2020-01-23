@@ -101,7 +101,6 @@ private:
   bool AFRFeedbackisEnabled;
   bool RPMFeedbackisEnabled;
 
-  int revsPerCalc;
   int revolutions;
   unsigned long totalRevolutions;
   unsigned long startingRevolutions;
@@ -145,7 +144,7 @@ private:
   unsigned long updateddMAP;
   unsigned long MAPPeak; // time of previous peak
   unsigned long MAPTrough; // time of previous trough
-  const unsigned long minMAPdt = 1000; // in microseconds
+  const unsigned long minMAPdt = 4000; // in microseconds
   NoiseReduced* MAPAvg;
   double AFR;
   NoiseReduced* AFRVolts;

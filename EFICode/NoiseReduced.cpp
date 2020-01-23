@@ -1,10 +1,17 @@
 #include "NoiseReduced.h"
+#include "Arduino.h"
 #include <stdlib.h>
 // Constructors
+
+double gaussian(double x){
+	return exp(-0.5*pow(x,2.));
+}
+
 NoiseReduced::NoiseReduced() {
   len = 10;
   filled = 0;
-  data = (double *)malloc(sizeof(double)*10);
+  data = (double *)malloc(sizeof(double)*len);
+  weights = (double *)malloc(sizeof(double)*len);
   avg = 0;
   head = 0;
 }
@@ -18,10 +25,20 @@ NoiseReduced::NoiseReduced(int sampleSize) {
     len = sampleSize;
   }
   filled = 0;
+  
   data = (double *)malloc(sizeof(double)*sampleSize);
+  weights = (double *)malloc(sizeof(double)*sampleSize);
+  
+  double totalWeights = 0;
   for (int i = 0; i < sampleSize; i++)
   {
       data[i] = 0;
+	  totalWeights += gaussian( (SD / sampleSize) * i);
+	  weights[i] = gaussian( (SD / sampleSize) * i);
+  }
+  // make weights add to 1
+  for (int i = 0; i < sampleSize; i++) {
+	  weights[i] = weights[i] / totalWeights;
   }
   avg = 0;
   head = 0;
@@ -42,4 +59,16 @@ int NoiseReduced::addData(double input) {
 
 double NoiseReduced::getData() {
   return avg;
+}
+
+double NoiseReduced::getGauss() {
+  double gauss = 0;
+  int head_local = head;
+  for (int i = 0; i < len; i++){
+	gauss += weights[i]*data[head_local];
+	head_local++;
+	if(head_local == len)
+	  head_local = 0;
+  }
+  return gauss;
 }
