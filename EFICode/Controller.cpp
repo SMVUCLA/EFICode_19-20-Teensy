@@ -123,13 +123,10 @@ void Controller::initializeParameters() {
 void Controller::countRevolution() {
   //  When called too soon, we skip countRevolution
   //  When micros() overflows, we continue as if its a normal countRevolution
-  if (micros() - previousRev > 0 && (micros() - previousRev < minDelayPerRev) && magnetsHit == 0)
+  if (micros() - previousRev > 0 && (micros() - previousRev < minDelayPerRev))
      return;
   previousRev = micros();
-  magnetsHit++;
-  if (magnetsHit >= numMagnets) { // entered Revolution
-      // Enable the injector if it is disabled.
-      if (INJisDisabled) {
+  if (INJisDisabled) {
         enableINJ();
       }
       
@@ -144,11 +141,32 @@ void Controller::countRevolution() {
           if (totalRevolutions % 2 == 1)
               pulseOn();
       } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
-	  if (!detectEngineOff() && ((60 * 1E6) / RPM > micros() - MAPTrough))
+      if (!detectEngineOff() && (MAPAvg->getGauss() > MAP))//&& ((60 * 1E6) / RPM > micros() - MAPTrough))
               pulseOn();
       }
-      magnetsHit = 0;
-  }
+//  magnetsHit++;
+//  if (magnetsHit >= numMagnets) { // entered Revolution
+//      // Enable the injector if it is disabled.
+//      if (INJisDisabled) {
+//        enableINJ();
+//      }
+//      
+//      // Increment the number of revolutions 
+//      revolutions++;
+//      totalRevolutions++;
+//      startingRevolutions++;
+//      //Lock guards seem unneccessary
+//      
+//      //Inject on every second revolution because this is a 4 stroke engine
+//      if (!detectEngineOff() && inStartingRevs()) {
+//          if (totalRevolutions % 2 == 1)
+//              pulseOn();
+//      } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
+//	  if (!detectEngineOff() && ((60 * 1E6) / RPM > micros() - MAPTrough))
+//              pulseOn();
+//      }
+//      //magnetsHit = 0;
+//  }
 }
 
 void Controller::enableINJ() {

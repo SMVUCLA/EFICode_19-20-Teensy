@@ -6,6 +6,9 @@
 double gaussian(double x){
 	return exp(-0.5*pow(x,2.));
 }
+double noWeight(){
+  return 1;
+}
 
 NoiseReduced::NoiseReduced() {
   len = 10;
@@ -33,8 +36,8 @@ NoiseReduced::NoiseReduced(int sampleSize) {
   for (int i = 0; i < sampleSize; i++)
   {
       data[i] = 0;
-	  totalWeights += gaussian( (SD / sampleSize) * i);
-	  weights[i] = gaussian( (SD / sampleSize) * i);
+	  totalWeights += noWeight();//gaussian( (SD / sampleSize) * i);
+	  weights[i] = noWeight();//gaussian( (SD / sampleSize) * i);
   }
   // make weights add to 1
   for (int i = 0; i < sampleSize; i++) {

@@ -75,7 +75,7 @@ const int minRPM = 120;     // In revolutions / minute
 const unsigned long maxMAP = 120000;     // In Pa
 const unsigned long minMAP = 20000;      // In Pa
 
-const unsigned long minDelayPerRev = (1 / (maxRPM * (1/60))) * (1E6); // in units of microseconds
+const unsigned long minDelayPerRev = (1 / (7600 * (1/60))) * (1E6); // in units of microseconds
 const unsigned int revsPerCalc = 5;
 
 // Define the number of rows and number of columns for the AFR Table.
