@@ -141,7 +141,7 @@ void Controller::countRevolution() {
           if (totalRevolutions % 2 == 1)
               pulseOn();
       } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
-      if (!detectEngineOff() && (MAPAvg->getGauss() > MAP))//&& ((60 * 1E6) / RPM > micros() - MAPTrough))
+        if (!detectEngineOff() && (MAPAvg->getGauss() > MAP))//&& ((60 * 1E6) / RPM > micros() - MAPTrough))
               pulseOn();
       }
 //  magnetsHit++;
