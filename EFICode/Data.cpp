@@ -1,6 +1,8 @@
 #include "Controller.h"
 #include "Arduino.h"
 #include "Constants.h"
+#include "SD.h"
+#include "SPI.h"
 
 void Controller::sendCurrentData() { // THIS MUST TAKE LESS THAN 1 ms (to guaruntee micros doesn't miss an overflow)
 // TODO:
@@ -8,7 +10,7 @@ void Controller::sendCurrentData() { // THIS MUST TAKE LESS THAN 1 ms (to guarun
 // -whether we are still on startup cycles
 // -engine on? (or just use RPM = 0)
   char toSend [500];
-  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02.2f:%02.2f:%01.3f:%01i:%01i:%010u:%03.3f:%03.3f\n", // about 97 bytes? (800-900 us)
+  sprintf(toSend, "%010u:%06i:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%03.3f:%05i:%05i:%05i:%02.2f:%02.2f:%01.3f:%01i:%01i:%010u:%03.3f:%03.3f:%01i:%s\n", // about 97 bytes? (800-900 us)
   	micros(), 
 	totalRevolutions, 
 	ECT, 
@@ -27,7 +29,15 @@ void Controller::sendCurrentData() { // THIS MUST TAKE LESS THAN 1 ms (to guarun
 	haveInjected,
 	MAPTrough,
   prevdMAP,
-  MAPAvg->getGauss());
+  MAPAvg->getGauss(),
+  SDConnected,
+  fileName);
+
+  if(SDConnected) { // open and write to file
+    File logFile = SD.open(fileName, FILE_WRITE);
+    logFile.write(toSend);
+    logFile.close();
+  }
   Serial.write(toSend);
 }
 
