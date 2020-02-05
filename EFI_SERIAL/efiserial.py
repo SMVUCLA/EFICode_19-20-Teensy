@@ -4,6 +4,8 @@ from config_loader import Config
 import time
 import atexit
 import pickle
+import glob
+import curses
 from curses import wrapper
 from curses import ascii as crsascii
 
@@ -37,6 +39,19 @@ sensors = {k: [] for k in
 ser = serial.Serial()
 
 def main(stdscr):
+  curses.echo()
+  stdscr.addstr(0,0, "serial/SDCard (s1 for serial, s2 for SD card)")
+  s = stdscr.getstr(1, 0)
+  #decide reading from serial or SDCard
+  if s == "s2":
+    files = glob.glob('./W20/*')
+    for n, i in zip(range(0, len(files)), files):
+      print('%d %s' %(n,i))
+  
+    fileN = int(input('which file?\n'))
+    nFile = open(files[fileN], 'r')
+    #contents = nFile.read()
+    #print(contents)
 
   # if config.ini exists, contine
   #  else create it and exit
