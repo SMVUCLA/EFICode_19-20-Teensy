@@ -34,7 +34,9 @@ sensors = {k: [] for k in
    'INJECTED',
    'MAPTrough',
    'dMAP',
-   'gMAP']}
+   'gMAP',
+   'SD_CONNECTED',
+   'SD_FILE_NAME']}
 
 ser = serial.Serial()
 
@@ -153,9 +155,15 @@ def main(stdscr):
     numMismatch = 0 # if we get here, no consecutive mismatch
     output = ''
     for k in range(len(allKeys)):
-      sensors[allKeys[k]].append(float(vals[k]))
+      try:
+        sensors[allKeys[k]].append(float(vals[k]))
+      except ValueError:
+        sensors[allKeys[k]].append(vals[k])
     for k in sensors:
-      output = output + k + ": " + str(float(vals[allKeys.index(k)])) + '\n'
+      try:
+        output = output + k + ": " + str(float(vals[allKeys.index(k)])) + '\n'
+      except ValueError:
+        output = output + k + ": " + str(vals[allKeys.index(k)]) + '\n'
     output = output + 'saving to: ' + dataPath + '\n'
     output = output + 'len of TPS: ' + str(len(sensors['TPS'])) + '\n'
     output = output + 'shift-s to save and exit'

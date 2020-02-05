@@ -116,6 +116,9 @@ private:
   bool enableSendingData;
   bool currentlySendingData; // used to disable data transmission during injection
   bool haveInjected; // allows data retrieval to know when injections happened
+  bool SDConnected;
+  const char baseFileName[6] = "sdlog";
+  char fileName[20] = "NOFILE";
 
   long int minTimePerSampleReported;
   long lastSerialOutputTime;

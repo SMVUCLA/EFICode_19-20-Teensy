@@ -4,6 +4,8 @@
 #include "Constants.h"
 #include "TimerThree.h"
 #include "NoiseReduced.h"
+#include "SD.h"
+#include "SPI.h"
 
 Controller::Controller() {
     //Sets injector pin to output mode. All other pins default to input mode.
@@ -26,6 +28,7 @@ Controller::Controller() {
   
     // Indicate ready
     //Serial.write("Ready to go!\n");
+
 }
 
 bool Controller::readSensors() {
@@ -102,6 +105,16 @@ void Controller::initializeParameters() {
     enableSendingData = true;
     currentlySendingData = enableSendingData;
     haveInjected = false;
+    if(enableSendingData) {
+      SDConnected = SD.begin(BUILTIN_SDCARD);
+      if(SDConnected) { // find new fileName
+        int fileNumber = 0;
+        do {
+          sprintf(fileName, "%s%i", baseFileName, fileNumber);
+          fileNumber++;
+        } while(SD.exists(fileName));
+      }
+    }
 
     // If false, doesn't use AFR feedback.
     AFRFeedbackisEnabled = false;

@@ -17,7 +17,7 @@
 #ifndef NOISEREDUCE_H
 #define NOISEREDUCE_H
 
-#define SD 6.0 //standard deviations
+#define STD_DEV 6.0 //standard deviations
 
 struct NoiseReduced {
   public:

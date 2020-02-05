@@ -36,8 +36,8 @@ NoiseReduced::NoiseReduced(int sampleSize) {
   for (int i = 0; i < sampleSize; i++)
   {
       data[i] = 0;
-	  totalWeights += noWeight();//gaussian( (SD / sampleSize) * i);
-	  weights[i] = noWeight();//gaussian( (SD / sampleSize) * i);
+	  totalWeights += noWeight();//gaussian( (STD_DEV / sampleSize) * i);
+	  weights[i] = noWeight();//gaussian( (STD_DEV / sampleSize) * i);
   }
   // make weights add to 1
   for (int i = 0; i < sampleSize; i++) {
