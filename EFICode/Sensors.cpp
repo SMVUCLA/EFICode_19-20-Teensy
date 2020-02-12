@@ -13,23 +13,14 @@ long Controller::getRPM (long int timePassed, int rev) {
 const double TPSConversion = .0019685;
 const double TPSOffset = -.33746;
 */
-const int TPS_0Deg = 69;
-const int TPS_90Deg = 885;
+const double TPS_0Deg = 60;
+const double TPS_90Deg = 865;
 
 double Controller::getTPS() {
-  // Gets throttle position as a percentage of open area
-  /*
-  double newTPS = constrain(
-    sin(TPSConversion * analogRead(TPS_Pin) + TPSOffset),
-    MIN_TPS,
-    MAX_TPS
-    );
-  */
   unsigned long currThrottleMeasurementTime = micros();
-  // ******NOTE: This is not a trig function so acceleration might be in excess*******
-  double newTPS = ((analogRead(TPS_Pin)-TPS_0Deg)/TPS_90Deg);//1 - cos(((analogRead(TPS_Pin)-TPS_0Deg)/TPS_90Deg)*HALF_PI); // mapping ADC to degrees since:
-    								    //   angle ~ resistance of lower resistor (sum of div is const) ~ ADC
-								    //   where ~ means proportiona
+  // calculate open throttle area (i think)
+  double newTPS = 1 - cos(((double(analogRead(TPS_Pin))-TPS_0Deg)/(TPS_90Deg - TPS_0Deg))*HALF_PI);
+  
   if(newTPS < 0)
     newTPS = 0;
   if(newTPS > 1)
