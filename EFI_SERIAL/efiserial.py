@@ -41,24 +41,6 @@ sensors = {k: [] for k in
 ser = serial.Serial()
 
 def main(stdscr):
-  curses.noecho() 
-  curses.echo()
-  stdscr.addstr(0,0, "serial/SDCard (s1 for serial, s2 for SD card)")
-  s = stdscr.getstr(1, 0)
-  #decide reading from serial or SDCard
-  if s == 's2':
-    stdscr.addstr("HI")
-    stdscr.getstr(1,0)
-    files = glob.glob('./W20/*')
-    for n, i in zip(range(0, len(files)), files):
-      tempStr = str(n) + " " + str(i)
-      stdscr.addstr("HIIII")
-    fileN = int(input('which file?\n'))
-    nFile = open(files[fileN], 'r')
-    contents = nFile.readLine()
-    stdscr.addstr(20,0, "made it to the end!")
-    stdscr.getstr(21,0)
-
 
   # if config.ini exists, contine
   #  else create it and exit
