@@ -7,7 +7,7 @@ import math
 def main():
 
   # Choose and open file
-  files = glob.glob('./W20/*')
+  files = glob.glob('./tests/*')
   for n, i in zip(range(0, len(files)), files):
     print('%d %s' %(n,i))
   
