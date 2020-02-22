@@ -141,22 +141,22 @@ void Controller::countRevolution() {
   previousRev = micros();
   if (INJisDisabled) {
         enableINJ();
-      }
+  }
       
-      // Increment the number of revolutions 
-      revolutions++;
-      totalRevolutions++;
-      startingRevolutions++;
-      //Lock guards seem unneccessary
+  // Increment the number of revolutions 
+  revolutions++;
+  totalRevolutions++;
+  startingRevolutions++;
+  //Lock guards seem unneccessary
       
-      //Inject on every second revolution because this is a 4 stroke engine
-      if (!detectEngineOff() && inStartingRevs()) {
-          if (totalRevolutions % 2 == 1)
-              pulseOn();
-      } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
-        if (!detectEngineOff() && (MAPAvg->getGauss() > MAP))//&& ((60 * 1E6) / RPM > micros() - MAPTrough))
-              pulseOn();
-      }
+  //Inject on every second revolution because this is a 4 stroke engine
+  if (!detectEngineOff() && inStartingRevs()) {
+      if (totalRevolutions % 2 == 1)
+          pulseOn();
+  } else {  // inject when the time since the last trough is < 1 period (2 rotations between troughs)
+    if (!detectEngineOff() && (MAPAvg->getGauss() > MAP))//&& ((60 * 1E6) / RPM > micros() - MAPTrough))
+          pulseOn();
+  }
 //  magnetsHit++;
 //  if (magnetsHit >= numMagnets) { // entered Revolution
 //      // Enable the injector if it is disabled.

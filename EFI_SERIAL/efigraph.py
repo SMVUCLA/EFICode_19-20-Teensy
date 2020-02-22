@@ -7,7 +7,7 @@ import math
 def main():
 
   # Choose and open file
-  files = glob.glob('./tests/*')
+  files = glob.glob('./W20/*')
   for n, i in zip(range(0, len(files)), files):
     print('%d %s' %(n,i))
   
@@ -59,7 +59,7 @@ def main():
   ax2 = plt.twinx()
   ax2.scatter(ms, drevs, color='green', label='dRevs')
   ax2.scatter(ms, sensors['INJECTED'], color='orange', label='Injected')
-  ax2.scatter(mpt, mptlen, color='red', label='MAP Trough')
+  #ax2.scatter(mpt, mptlen, color='red', label='MAP Trough')
   #ax2.scatter(ms, dmapPos, color='red', label='dMAP is Positive')
   #for i in range(len(mpt)):
    # ax2.axvline(x=mpt[i])
@@ -74,6 +74,16 @@ def main():
   plt.tight_layout()
   plt.legend(loc='upper left')
   plt.title('MAP vs Micros')
+  
+  plt.figure(4)
+  plt.plot(ms, list(sensors['ECT']))
+  ax2 = plt.twinx()
+  plt.tight_layout()
+  plt.title('ECT vs Micros')
+  
+  plt.figure(5)
+  plt.plot(ms, list(sensors['TPS']))
+  plt.title('TPS vs Micros')
   
   #
   # dMicros
