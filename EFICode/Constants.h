@@ -20,7 +20,7 @@ void lowerStartupMod();
 //const int FRS_Pin = 6; // don't have
 #define SP1 7
 #define OIN1_Pin A14
-#define OIN2_Pin A16// A15
+#define OIN2_Pin A16//A15
 #define SP2 8
 #define SP3 39
 #define SP4 37
@@ -60,7 +60,7 @@ const int MAX_AFR = 18;
 // Define the range of values that the Intake air temperature can take.
 const int MIN_IAT = 200;  // In Kelvin
 const int MAX_IAT = 500;  // In Kelvin
-const int MAX_ALLOWABLE_ECT = 400; // CHANGE********************************************************************
+const int MAX_ALLOWABLE_ECT = 450; // CHANGE********************************************************************
 
 // Define the range of values that the Throttle Position value can take.
 const int MIN_TPS = 0;
