@@ -1,5 +1,6 @@
 import glob
 import pickle
+from mpl_toolkits.mplot3d import Axes3D  
 import matplotlib.pyplot as plt
 import numpy as np
 import math
@@ -21,7 +22,7 @@ def main():
   # INDEXS USED
   #
   plt.figure(1)
-  plt.hist2d(sensors['RPM_INDEX'],sensors['MAP_INDEX'], 20, [[0, 11], [0, 10]])
+  plt.hist2d(sensors['RPM_INDEX'],sensors['MAP_INDEX'], [10, 11], [[0, 10], [0, 9]])
   plt.colorbar()
   plt.grid()
   plt.gca().invert_yaxis()
@@ -38,6 +39,7 @@ def main():
   mptlen = list(np.ones(len(mpt)))
   dmap = list(sensors['dMAP'])
   gmap = list(sensors['gMAP'])
+  afr = list(sensors['AFR_HIGH_RANGE'])
   dmapPos = [a > 0 for a in dmap]
   drevs = [b - a for b, a in zip(revs[1:-1], revs[0:-2])]
   drevs = [0] + drevs[:] + [0]
@@ -84,6 +86,18 @@ def main():
   plt.figure(5)
   plt.plot(ms, list(sensors['TPS']))
   plt.title('TPS vs Micros')
+  
+  plt.figure(6)
+  plt.plot(ms, afr);
+  plt.title('AFR vs Micros')
+  
+  # plt.figure(7)
+  # plt.gca(projection='3d')
+  # plt.scatter([int(i) for i in sensors['RPM_INDEX']],[int(i) for i in sensors['MAP_INDEX']],afr)
+  # #plt.gca().invert_yaxis()
+  # plt.set_xlabel('RPM index')
+  # plt.set_ylabel('MAP index')
+  # plt.set_zlabel('AFR')
   
   #
   # dMicros

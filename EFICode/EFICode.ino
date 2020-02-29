@@ -61,6 +61,7 @@ void loop() {
 
   // Update Controller with most recent sensor values.
   c->readSensors();
+  c->getAFR();
 
   // Look up injection time on each loop cycle
   c->lookupPulseTime();

@@ -37,7 +37,8 @@ sensors = {k: [] for k in
    'gMAP',
    'SD_CONNECTED',
    'SD_FILE_NAME',
-   'OVER_MAX_TEMP']}
+   'OVER_MAX_TEMP',
+   'AFR_HIGH_RANGE']}
 
 ser = serial.Serial()
 
