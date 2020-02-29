@@ -13,14 +13,14 @@ void lowerStartupMod();
 #define HES_Pin 36 // (GP3) updated (digital) 
 #define TPS_Pin A13 // updated (analog)
 #define ECT_Pin A19 // updated (analog)
-#define MAP_Pin A15//A16 // updated (analog)
+#define MAP_Pin A16 // updated (analog)
 #define IAT_Pin A18 // updated (analog)
 #define INJ_Pin 31 // updated (digital)
 #define FP_Pin A17  // updated (analog)
 //const int FRS_Pin = 6; // don't have
 #define SP1 7
 #define OIN1_Pin A14
-#define OIN2_Pin A16//A15
+#define OIN2_Pin A15
 #define SP2 8
 #define SP3 39
 #define SP4 37
