@@ -147,7 +147,10 @@ void Controller::countRevolution() {
   revolutions++;
   totalRevolutions++;
   startingRevolutions++;
-  //Lock guards seem unneccessary
+
+  // MAX TEMP CHECK
+  if (ECT > MAX_ALLOWABLE_ECT)
+    return;
       
   //Inject on every second revolution because this is a 4 stroke engine
   if (!detectEngineOff() && inStartingRevs()) {

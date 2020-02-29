@@ -13,14 +13,14 @@ void lowerStartupMod();
 #define HES_Pin 36 // (GP3) updated (digital) 
 #define TPS_Pin A13 // updated (analog)
 #define ECT_Pin A19 // updated (analog)
-#define MAP_Pin A16 // updated (analog)
+#define MAP_Pin A15//A16 // updated (analog)
 #define IAT_Pin A18 // updated (analog)
 #define INJ_Pin 31 // updated (digital)
 #define FP_Pin A17  // updated (analog)
 //const int FRS_Pin = 6; // don't have
 #define SP1 7
 #define OIN1_Pin A14
-#define OIN2_Pin A15
+#define OIN2_Pin A16// A15
 #define SP2 8
 #define SP3 39
 #define SP4 37
@@ -60,6 +60,7 @@ const int MAX_AFR = 18;
 // Define the range of values that the Intake air temperature can take.
 const int MIN_IAT = 200;  // In Kelvin
 const int MAX_IAT = 500;  // In Kelvin
+const int MAX_ALLOWABLE_ECT = 400; // CHANGE********************************************************************
 
 // Define the range of values that the Throttle Position value can take.
 const int MIN_TPS = 0;
@@ -75,7 +76,7 @@ const int minRPM = 120;     // In revolutions / minute
 const unsigned long maxMAP = 120000;     // In Pa
 const unsigned long minMAP = 20000;      // In Pa
 
-const unsigned long minDelayPerRev = (1 / (7600 * (1/60))) * (1E6); // in units of microseconds
+const unsigned long minDelayPerRev = (1 / (8000 * (1/60))) * (1E6); // in units of microseconds
 const unsigned int revsPerCalc = 5;
 
 // Define the number of rows and number of columns for the AFR Table.

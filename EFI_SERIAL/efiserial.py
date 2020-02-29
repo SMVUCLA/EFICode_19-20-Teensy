@@ -36,7 +36,8 @@ sensors = {k: [] for k in
    'dMAP',
    'gMAP',
    'SD_CONNECTED',
-   'SD_FILE_NAME']}
+   'SD_FILE_NAME',
+   'OVER_MAX_TEMP']}
 
 ser = serial.Serial()
 
