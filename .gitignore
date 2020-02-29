@@ -68,3 +68,6 @@ nbbuild.xml
 nbproject
 
 *.swp
+
+EFI_SERIAL/tests
+EFI_SERIAL/W20
