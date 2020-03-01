@@ -52,7 +52,7 @@ void setup() {
   Timer1.start();
   
   pinMode(LED_1, OUTPUT);  
-  digitalWrite(LED_1, HIGH);
+  digitalWrite(LED_1, LOW);
 }
 
 void loop() {
@@ -83,11 +83,11 @@ void countRev() {
 
 void handle_pulseTimerTimeout() {
 //toggle every time timer is stopped
-  if(digitalRead(LED_1) == 0){ 
+  /*if(digitalRead(LED_1) == 0){ 
     digitalWrite(LED_1, HIGH);
   }else{
     digitalWrite(LED_1, LOW);
-  }
+  }*/
   c->pulseOff();
 }
 
