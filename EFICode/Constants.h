@@ -60,7 +60,7 @@ const int MAX_AFR = 18;
 // Define the range of values that the Intake air temperature can take.
 const int MIN_IAT = 200;  // In Kelvin
 const int MAX_IAT = 500;  // In Kelvin
-const int MAX_ALLOWABLE_ECT = 450; // CHANGE********************************************************************
+const int MAX_ALLOWABLE_ECT = 400; // CHANGE********************************************************************
 
 // Define the range of values that the Throttle Position value can take.
 const int MIN_TPS = 0;
