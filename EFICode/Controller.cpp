@@ -292,7 +292,7 @@ void Controller::lookupPulseTime() { // ********map IS AN INTEGER OPERATION*****
     // Add extra fuel for starting
     if (inStartingRevs())
     {
-        //tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
+        tempPulseTime *= startupModifier; // dictated by setStartupModifier() (this function has bugs)
     }
 
     throttleAdjustment = computeThrottleAdjustment(); // 1 + TPS^2 (THIS IS LIKELY A BUGGY FUNCTION)
