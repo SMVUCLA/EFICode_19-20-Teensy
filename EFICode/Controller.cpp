@@ -149,8 +149,10 @@ void Controller::countRevolution() {
   startingRevolutions++;
 
   // MAX TEMP CHECK
-  if (ECT > MAX_ALLOWABLE_ECT)
+  if (ECT > MAX_ALLOWABLE_ECT){
+    digitalWrite(LED_1, HIGH);
     return;
+  }
       
   //Inject on every second revolution because this is a 4 stroke engine
   if (!detectEngineOff() && inStartingRevs()) {
