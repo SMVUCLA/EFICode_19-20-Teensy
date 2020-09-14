@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import serial
 from config_loader import Config

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import glob
 import pickle
 from mpl_toolkits.mplot3d import Axes3D  
@@ -27,19 +28,33 @@ def main():
   plt.grid()
   plt.gca().invert_yaxis()
   plt.title('MAP_INDEX vs RPM_INDEX')
-
+ 
   ms = list(sensors['micros'])
-  ipt = list(sensors['injectorPulseTime'])
+  revs = list(sensors['totalRevs'])
+  # ECT
+  # IAT
   mp = list(sensors['MAP'])
   mpavg = list(sensors['MAP_AVG'])
-  rpm = list(sensors['RPM'])
   tps = list(sensors['TPS'])
-  revs = list(sensors['totalRevs'])
+  # AFR
+  rpm = list(sensors['RPM'])
+  ipt = list(sensors['injectorPulseTime'])
+  # lastPulse
+  # MAP_INDEX
+  # RPM_INDEX
+  # STARTUP_MOD
+  # STARTING_BOOL
+  # INJECTED
   mpt = list(sensors['MAPTrough'])
-  mptlen = list(np.ones(len(mpt)))
   dmap = list(sensors['dMAP'])
   gmap = list(sensors['gMAP'])
+  # SD_CONNECTED
+  # SD_FILE_NAME
+  # OVER_MAX_TEMP
   afr = list(sensors['AFR_HIGH_RANGE'])
+
+  mptlen = list(np.ones(len(mpt)))
+
   dmapPos = [a > 0 for a in dmap]
   drevs = [b - a for b, a in zip(revs[1:-1], revs[0:-2])]
   drevs = [0] + drevs[:] + [0]
